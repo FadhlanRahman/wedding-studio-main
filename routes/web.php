@@ -1,0 +1,65 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PortofolioController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BookingController;
+
+// ====================
+// HALAMAN UTAMA (USER)
+// ====================
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
+    Route::get('/services', [ServicesController::class, 'index'])->name('services');
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+    // Booking user
+    Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+});
+
+// Halaman Tentang
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+// ====================
+// AUTENTIKASI
+// ====================
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ====================
+// HALAMAN ADMIN
+// ====================
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Dashboard
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Akun Terdaftar
+    Route::get('/admin/accounts', [AdminController::class, 'accounts'])->name('admin.accounts');
+    Route::get('/admin/accounts/{user}/edit', [AdminController::class, 'edit'])->name('admin.accounts.edit');
+    Route::put('/admin/accounts/{user}', [AdminController::class, 'update'])->name('admin.accounts.update');
+    Route::delete('/admin/accounts/{user}', [AdminController::class, 'destroy'])->name('admin.accounts.destroy');
+
+    // Kalender Booking
+    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+
+    // Profil Admin
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+
+    // =========================
+    // Booking Admin (edit & update)
+    // =========================
+    Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index'); // list booking
+    Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit'); // edit form
+    Route::put('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update'); // simpan edit
+    Route::delete('/admin/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy'); // hapus booking
+});
