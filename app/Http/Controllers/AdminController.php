@@ -13,7 +13,12 @@ class AdminController extends Controller
     // =================
     public function index()
     {
-        return view('admin.dashboard');
+        // Ambil semua booking untuk hitung total income
+        $bookings     = Booking::orderBy('booking_date', 'asc')->get();
+        $totalIncome  = $bookings->sum('total_price');
+        $totalUsers   = User::count();
+
+        return view('admin.dashboard', compact('bookings', 'totalIncome', 'totalUsers'));
     }
 
     // =================
@@ -25,13 +30,11 @@ class AdminController extends Controller
         return view('admin.accounts', compact('users'));
     }
 
-    // Form Edit User
     public function edit(User $user)
     {
         return view('admin.accounts.edit', compact('user'));
     }
 
-    // Update User
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -47,10 +50,9 @@ class AdminController extends Controller
         return redirect()->route('admin.accounts')->with('success', 'Akun berhasil diperbarui!');
     }
 
-    // Hapus User
     public function destroy(User $user)
     {
-        if(auth()->id() === $user->id){
+        if (auth()->id() === $user->id) {
             return redirect()->back()->with('error', 'Tidak bisa menghapus akun sendiri!');
         }
 
@@ -63,8 +65,9 @@ class AdminController extends Controller
     // =================
     public function calendar()
     {
-        // Ambil semua booking, urutkan berdasarkan tanggal
-        $bookings = Booking::orderBy('booking_date', 'asc')->get();
+        // Gunakan paginate agar bisa dipanggil dengan ->links() di Blade
+        $bookings = Booking::orderBy('booking_date', 'asc')->paginate(10);
+
         return view('admin.calendar', compact('bookings'));
     }
 

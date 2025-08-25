@@ -10,9 +10,9 @@ class PortofolioController extends Controller
     {
         $projects = [
             [
-                'title' => 'Luxury Ballroom Wedding',
-                'description' => 'Pernikahan megah di ballroom hotel bintang lima dengan dekorasi mewah dan lighting elegan.',
-                'image' => 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'
+                'title' => 'After Make Up',
+                'description' => 'Make up cantik dan elegan yang mewah dan lebih fresh',
+                'image' => asset('portofolio/portofolio4.jpg')
             ],
             [
                 'title' => 'Romantic Garden Ceremony',

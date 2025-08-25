@@ -15,5 +15,10 @@ class Booking extends Model
         'birth_date',
         'booking_date',
         'phone',
+        'service',
+        'total_price',
+        'payment_method',
+        'payment_status',
+        'payment_proof', // ✅ ditambahkan
     ];
 }

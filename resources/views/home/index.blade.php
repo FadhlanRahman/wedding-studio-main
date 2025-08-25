@@ -46,13 +46,38 @@
     {{-- Testimoni Singkat --}}
     <section class="py-16 bg-gray-50 px-6">
         <h2 class="text-3xl font-semibold text-center text-blue-500 mb-8">Apa Kata Klien Kami</h2>
-        <div class="bg-white shadow-lg rounded-lg p-8 text-center max-w-3xl mx-auto">
-            <p class="text-gray-700 italic text-lg">
-                "Luar biasa! Makeup nya flawless dan dokumentasinya sangat menyentuh. Terima kasih Ellen Studio sudah buat hari kami jadi sangat berkesan!"
+
+        <div 
+            x-data="{ activeSlide: 0, slides: [
+                { text: 'Luar biasa! Makeup-nya flawless dan dokumentasinya sangat menyentuh. Terima kasih Ellen Studio sudah buat hari kami jadi sangat berkesan!', name: 'Arina & Dimas' },
+                { text: 'Tim Ellen Studio sangat profesional, hasil foto dan videonya benar-benar mengabadikan momen kami dengan sempurna.', name: 'Rina & Bagas' },
+                { text: 'Pelayanan ramah dan hasil riasnya bikin saya percaya diri di hari spesial. Sangat recommended!', name: 'Maya & Budi' }
+            ] }" 
+            x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)"
+            class="max-w-3xl mx-auto"
+        >
+            {{-- Slide --}}
+            <div class="bg-white shadow-lg rounded-lg p-8 text-center" 
+                x-text="slides[activeSlide].text"
+                class="text-gray-700 italic text-lg">
+            </div>
+
+            {{-- Nama Klien --}}
+            <p class="text-blue-600 mt-4 font-semibold text-center" 
+            x-text="'— ' + slides[activeSlide].name">
             </p>
-            <p class="text-blue-600 mt-4 font-semibold">— Arina & Dimas</p>
+
+            {{-- Dots Navigasi --}}
+            <div class="flex justify-center mt-4 space-x-2">
+                <template x-for="(slide, index) in slides" :key="index">
+                    <button @click="activeSlide = index" 
+                            :class="activeSlide === index ? 'bg-blue-500' : 'bg-gray-300'" 
+                            class="w-3 h-3 rounded-full"></button>
+                </template>
+            </div>
         </div>
     </section>
+
 
     {{-- Mini Portofolio --}}
     <section class="py-16 px-6">

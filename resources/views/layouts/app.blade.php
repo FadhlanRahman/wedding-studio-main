@@ -19,6 +19,9 @@
         @yield('content')
     </main>
 
+    {{-- Script Alpine.js --}}
+    <script src="//unpkg.com/alpinejs" defer></script>
+
 </body>
 
 

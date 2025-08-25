@@ -14,6 +14,7 @@ use App\Http\Controllers\BookingController;
 // HALAMAN UTAMA (USER)
 // ====================
 Route::middleware(['auth', 'user'])->group(function () {
+    // Halaman utama
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
     Route::get('/services', [ServicesController::class, 'index'])->name('services');
@@ -21,10 +22,10 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     // Booking user
     Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store'); // <= disesuaikan
 });
 
-// Halaman Tentang
+// Halaman Tentang (bisa diakses tanpa login)
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // ====================
@@ -49,17 +50,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/accounts/{user}', [AdminController::class, 'update'])->name('admin.accounts.update');
     Route::delete('/admin/accounts/{user}', [AdminController::class, 'destroy'])->name('admin.accounts.destroy');
 
-    // Kalender Booking
-    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
+    // Kalender Booking (ADMIN)
+    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar'); // <= disesuaikan
 
     // Profil Admin
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
 
     // =========================
-    // Booking Admin (edit & update)
+    // Booking Admin (pakai controller yang sama)
     // =========================
-    Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index'); // list booking
-    Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit'); // edit form
-    Route::put('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update'); // simpan edit
-    Route::delete('/admin/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy'); // hapus booking
+    Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
+    Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit');
+    Route::put('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update');
+    Route::delete('/admin/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy');
 });
