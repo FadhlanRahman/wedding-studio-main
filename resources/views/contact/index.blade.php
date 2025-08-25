@@ -10,7 +10,7 @@
                 Our Contact 
             </h2>
             <p class="text-gray-700 text-lg md:text-xl max-w-3xl mx-auto animate-fadeInUp" style="animation-delay:100ms;">
-                Kami siap membantu Anda mewujudkan pernikahan impian kapan saja dimanapun. Silakan hubungi kami melalui form, WhatsApp, email, media sosial, atau kunjungi langsung lokasi kami.
+                Kami siap membantu Anda mewujudkan pernikahan impian dimanapun. Silakan hubungi kami melalui form, WhatsApp, email, media sosial, atau kunjungi langsung lokasi kami.
             </p>
         </section>
 
