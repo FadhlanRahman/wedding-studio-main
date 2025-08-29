@@ -12,9 +12,6 @@
   <div class="relative z-10 py-20">
     {{-- Header --}}
     <header class="text-center mb-14 fade-in-up">
-      <p class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide bg-white/20 text-white/90 backdrop-blur">
-        ✨ Premium Packages · Makeup · Bridal · Creative
-      </p>
       <h1 class="mt-4 text-4xl md:text-5xl font-extrabold text-white drop-shadow-[0_6px_24px_rgba(30,58,138,0.45)]">
         Our Wedding Services
       </h1>
