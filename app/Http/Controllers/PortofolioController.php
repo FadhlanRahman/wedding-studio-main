@@ -9,7 +9,7 @@ class PortofolioController extends Controller
 {
     public function index()
     {
-        // =================== DATA UNTUK GALERI FOTO (tetap seperti punyamu) ===================
+        // =================== FOTO ===================
         $photo_projects = collect([
             [
                 'title' => 'Elegant Make Up Transformation',
@@ -75,48 +75,64 @@ class PortofolioController extends Controller
             ],
         ]);
 
-        // =================== DATA UNTUK VIDEO EXTERNAL (YouTube/Vimeo) ===================
+        // =================== VIDEO EXTERNAL ===================
         $video_projects = collect([
             ['title' => 'Cinematic Wedding of Sarah & David', 'video_url' => 'https://www.youtube.com/embed/ScMzIvxBSi4'],
-            ['title' => 'Our Story: Pre-wedding Highlight',     'video_url' => 'https://www.youtube.com/embed/2Bv-I222f5U'],
-            ['title' => 'A Day to Remember',                     'video_url' => 'https://www.youtube.com/embed/LXb3EKWsInQ'],
+            ['title' => 'Our Story: Pre-wedding Highlight',   'video_url' => 'https://www.youtube.com/embed/2Bv-I222f5U'],
+            ['title' => 'A Day to Remember',                   'video_url' => 'https://www.youtube.com/embed/LXb3EKWsInQ'],
         ]);
 
-        // =================== DATA UNTUK VIDEO LOKAL (MP4) ===================
-        // Opsi A (langsung tulis manual – cepat untuk demo):
-        $local_videos = collect([
-            // Pastikan file ini ada di public/portofolio/videos/
-            ['title' => 'BTS: Bridal Prep',     'path' => 'portofolio/videos/bridal_prep.mp4',     'poster' => 'portofolio/videos/bridal_prep.jpg'],
-            ['title' => 'Makeup Timelapse',     'path' => 'portofolio/videos/makeup_timelapse.mp4','poster' => null],
-            ['title' => 'Studio Tour',          'path' => 'portofolio/videos/studio_tour.mp4',     'poster' => 'portofolio/videos/studio_tour.png'],
-        ]);
+        // =================== VIDEO LOKAL (auto-scan) ===================
+        // Taruh file videomu di salah satu folder ini:
+        // - public/portofolio/videos
+        // - public/portofolio_videos
+        // Poster opsional: nama sama dengan video (.jpg/.png)
+        $searchDirs = ['portofolio/videos', 'portofolio_videos'];
+        $allowedExt = ['mp4', 'webm', 'ogg'];
 
-        // Opsi B (auto-scan folder public/portofolio/videos untuk semua .mp4)
-        // Jika ingin otomatis, biarkan blok ini menggantikan data di atas saat file ditemukan.
-        $videosDir = public_path('portofolio/videos');
-        if (File::isDirectory($videosDir)) {
-            $discovered = collect(File::files($videosDir))
-                ->filter(fn($f) => strtolower($f->getExtension()) === 'mp4')
-                ->map(function ($file) {
-                    $filename = $file->getFilename(); // ex: makeup_timelapse.mp4
-                    $basename = pathinfo($filename, PATHINFO_FILENAME); // ex: makeup_timelapse
-                    $posterJpg = public_path("portofolio/videos/{$basename}.jpg");
-                    $posterPng = public_path("portofolio/videos/{$basename}.png");
-                    $posterRel = File::exists($posterJpg)
-                        ? "portofolio/videos/{$basename}.jpg"
-                        : (File::exists($posterPng) ? "portofolio/videos/{$basename}.png" : null);
+        $local_videos = collect();
+
+        foreach ($searchDirs as $relDir) {
+            $absDir = public_path($relDir);
+            if (!File::isDirectory($absDir)) {
+                continue;
+            }
+
+            $found = collect(File::files($absDir))
+                ->filter(function ($f) use ($allowedExt) {
+                    return in_array(strtolower($f->getExtension()), $allowedExt, true);
+                })
+                ->map(function ($f) use ($relDir) {
+                    $filename = $f->getFilename();                          // e.g. my_clip.mp4
+                    $basename = pathinfo($filename, PATHINFO_FILENAME);      // e.g. my_clip
+
+                    $posterRel = null;
+                    foreach (['jpg', 'png', 'jpeg'] as $imgExt) {
+                        $candidate = public_path("$relDir/{$basename}.{$imgExt}");
+                        if (File::exists($candidate)) {
+                            $posterRel = "$relDir/{$basename}.{$imgExt}";
+                            break;
+                        }
+                    }
+
+                    // Format judul dari nama file
+                    $title = ucwords(str_replace(['_', '-'], ' ', $basename));
 
                     return [
-                        'title'  => ucwords(str_replace(['_', '-'], ' ', $basename)),
-                        'path'   => "portofolio/videos/{$filename}",
-                        'poster' => $posterRel,
+                        'title'  => $title,
+                        'path'   => "$relDir/{$filename}",
+                        'poster' => $posterRel, // boleh null
                     ];
                 });
 
-            if ($discovered->isNotEmpty()) {
-                $local_videos = $discovered->values();
-            }
+            $local_videos = $local_videos->merge($found);
         }
+
+        // Hapus duplikat (berdasarkan path) & urutkan
+        $local_videos = $local_videos
+            ->unique('path')
+            ->sortBy('title')
+            ->values();
 
         return view('portofolio.index', compact(
             'photo_projects',
