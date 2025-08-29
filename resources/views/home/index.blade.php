@@ -4,7 +4,7 @@
 <div class="bg-white">
 
     {{-- HERO Section --}}
-    <section class="relative bg-cover bg-center h-screen" style="background-image: url('{{ asset('background/background.jpg') }}')">
+    <section class="relative bg-cover bg-center h-screen" style="background-image: url('{{ asset('background/background.jpeg') }}')">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
 
     <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
