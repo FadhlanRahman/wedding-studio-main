@@ -240,6 +240,7 @@
   </div>
 </section>
 
+
 {{-- Scripts: jQuery -> event.move -> twentytwenty -> Swiper --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.event.move/2.0.0/jquery.event.move.min.js"></script>

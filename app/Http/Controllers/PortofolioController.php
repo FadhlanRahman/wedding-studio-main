@@ -7,6 +7,21 @@ use Illuminate\Support\Facades\File;
 
 class PortofolioController extends Controller
 {
+    private function toEmbedUrl($url)
+    {
+        // untuk format short: https://youtu.be/VIDEOID
+        if (str_contains($url, 'youtu.be')) {
+            $id = basename(parse_url($url, PHP_URL_PATH));
+            return "https://www.youtube.com/embed/{$id}";
+        }
+        // untuk format watch?v=VIDEOID
+        if (str_contains($url, 'watch?v=')) {
+            parse_str(parse_url($url, PHP_URL_QUERY), $query);
+            return "https://www.youtube.com/embed/" . ($query['v'] ?? '');
+        }
+        return $url;
+    }
+
     public function index()
     {
         // =================== FOTO ===================
@@ -74,13 +89,19 @@ class PortofolioController extends Controller
             ],
         ]);
 
-        // =================== VIDEO EXTERNAL ===================
+           // VIDEO EXTERNAL (gunakan link mentah, lalu di-convert)
         $video_projects = collect([
-            ['title' => 'Cinematic Wedding of Sarah & David', 'video_url' => 'https://www.youtube.com/embed/ScMzIvxBSi4'],
-            ['title' => 'Our Story: Pre-wedding Highlight',   'video_url' => 'https://www.youtube.com/embed/2Bv-I222f5U'],
-            ['title' => 'A Day to Remember',                   'video_url' => 'https://www.youtube.com/embed/LXb3EKWsInQ'],
-        ]);
+            ['title' => 'Cinematic Wedding of Putri & Faza', 'video_url' => 'https://youtu.be/CGoxTMkNbmQ?si=4DmlGSP9PpqXMzIQ'],
+            ['title' => 'Our Story: Pre-wedding Highlight',   'video_url' => 'https://youtu.be/CVq-My6s8kM?si=MZJEw9FYhgihAvRc'],
+            ['title' => 'A Day to Remember',                  'video_url' => 'https://youtu.be/1-GLrbJzG3A?si=mc_kZesSJdI06x6e'],
+        ])->map(function ($item) {
+            return [
+                'title' => $item['title'],
+                'video_url' => $this->toEmbedUrl($item['video_url']), // konversi di sini
+            ];
+        });
 
+        
         // =================== VIDEO LOKAL (auto-scan) ===================
         // Taruh file videomu di salah satu folder ini:
         // - public/portofolio/videos
