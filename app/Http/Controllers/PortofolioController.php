@@ -14,64 +14,63 @@ class PortofolioController extends Controller
             [
                 'title' => 'Elegant Make Up Transformation',
                 'description' => 'Transformasi makeup yang fresh dan menawan.',
-                'before_image' => 'portofolio/makeup_before.jpg',
+                'before_image' => 'portofoliol/makeup_before.jpg',
                 'after_image'  => 'portofolio/makeup_after.jpg',
             ],
             [
                 'title' => 'Romantic Garden Ceremony',
                 'description' => 'Pernikahan di taman bunga dengan suasana romantis.',
-                'image' => 'https://images.unsplash.com/photo-1603006905003-c10fa3b52f60?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_flower.jpg'
             ],
             [
                 'title' => 'Classic White Theme',
                 'description' => 'Tema putih klasik untuk suasana elegan dan timeless.',
-                'image' => 'https://images.unsplash.com/photo-1624204745952-07b5a4e23995?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/White_themes.jpg'
             ],
             [
                 'title' => 'Rustic Bohemian Wedding',
                 'description' => 'Tema bohemian dengan dekorasi kayu dan bunga kering.',
-                'image' => 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Bohemian_wedding.jpeg'
             ],
             [
                 'title' => 'Intimate Vows Exchange',
                 'description' => 'Momen sakral saat kedua mempelai mengucap janji suci.',
-                'image' => 'https://images.unsplash.com/photo-1597158269299-09163f354c4a?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Ijab_kobul.jpeg'
             ],
             [
                 'title' => 'Detailed Wedding Rings',
                 'description' => 'Detail cincin pernikahan yang melambangkan ikatan abadi.',
-                'image' => 'https://images.unsplash.com/photo-1598433823773-1343d3a95c66?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_rings.png'
             ],
             [
                 'title' => 'Venue Transformation',
                 'description' => 'Dekorasi menakjubkan yang mengubah lokasi biasa menjadi luar biasa.',
-                'before_image' => 'portofolio/venue_before.jpg',
-                'after_image'  => 'portofolio/venue_after.jpg',
+                'image' => 'portofoliol/Weeding_deco.jpg'
             ],
             [
                 'title' => 'Joyful Celebration',
                 'description' => 'Keceriaan tamu dan keluarga yang turut merayakan hari bahagia.',
-                'image' => 'https://images.unsplash.com/photo-1550005863-d39b835948f2?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_joyful.jpg'
             ],
             [
                 'title' => 'Elegant Bridal Gown',
                 'description' => 'Gaun pengantin yang anggun dan mempesona.',
-                'image' => 'https://images.unsplash.com/photo-1604193315743-30d418a0e8a7?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_gown.jpg'
             ],
             [
                 'title' => 'First Dance Moment',
                 'description' => 'Dansa pertama sebagai suami istri yang penuh kehangatan.',
-                'image' => 'https://images.unsplash.com/photo-1593213543166-260a2f43a05e?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_dance.jpg'
             ],
             [
                 'title' => 'Sunset Pre-wedding',
                 'description' => 'Sesi foto pre-wedding dengan latar senja yang romantis.',
-                'image' => 'https://images.unsplash.com/photo-1515934751635-481eff6241b7?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Sunset_wedding.jpg'
             ],
             [
                 'title' => 'Gourmet Wedding Cake',
                 'description' => 'Kue pernikahan lezat dengan desain yang artistik.',
-                'image' => 'https://images.unsplash.com/photo-1616690397500-48805364b633?auto=format&fit=crop&w=800&q=80'
+                'image' => 'portofoliol/Wedding_cake.jpg'
             ],
         ]);
 
