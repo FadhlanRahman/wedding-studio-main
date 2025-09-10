@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 <section class="relative min-h-screen bg-wallpaper">
   {{-- Soft blob --}}
   <div aria-hidden class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -87,14 +89,7 @@
     top: -100px; left: -100px;
   }
 
-/* Background utama */
-body {
-  background: linear-gradient(to right, #0d47a1, #1976d2, #42a5f5); /* gradasi biru */
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  color: white;
-}
+
 
   /* === Card transparan (glassmorphism) === */
   .service-card {

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twentytwenty/0.9.1/css/twentytwenty.css" />
+
+
 
 <style>
   :root{
