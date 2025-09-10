@@ -16,7 +16,7 @@
         <li><a href="{{ route('admin.accounts') }}" class="block hover:bg-blue-700 p-2 rounded">Akun Terdaftar</a></li>
         <li><a href="{{ route('admin.calendar') }}" class="block hover:bg-blue-700 p-2 rounded">Kalender</a></li>
         <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">services</a></li>
-        <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">about</a></li>
+        <li><a href="{{ route('admin.about') }}" class="block hover:bg-blue-700 p-2 rounded">about</a></li>
         <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">contact</a></li>
         <li>
         <li>

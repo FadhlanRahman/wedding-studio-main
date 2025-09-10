@@ -71,6 +71,14 @@ class AdminController extends Controller
         return view('admin.calendar', compact('bookings'));
     }
 
+    //about admin//
+        public function about()
+    {
+        return view('admin.about'); 
+    }
+
+
+
     // =================
     // Profil Admin
     // =================
@@ -80,3 +88,5 @@ class AdminController extends Controller
         return view('admin.profile', compact('admin'));
     }
 }
+
+
