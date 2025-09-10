@@ -77,6 +77,24 @@ class AdminController extends Controller
         return view('admin.about'); 
     }
 
+    //contact admin//
+        public function contact()
+    {
+        return view('admin.contact'); 
+    }
+
+    //services admin//
+        public function services()
+    {
+        return view('admin.services'); 
+    }
+
+    //about portofolio//
+        public function portofolio()
+    {
+        return view('admin.portofolio'); 
+    }
+
 
 
     // =================

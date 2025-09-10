@@ -53,8 +53,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Kalender Booking (ADMIN)
     Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar'); // <= disesuaikan
 
-    // Kalender Booking (ADMIN)
+    // About
     Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about'); // <= disesuaikan
+
+    // contact
+    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact'); // <= disesuaikan
+
+    // services
+    Route::get('/admin/services', [AdminController::class, 'services'])->name('admin.services'); // <= disesuaikan
+
+    // portofolio
+    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio'); // <= disesuaikan
 
     // Profil Admin
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');

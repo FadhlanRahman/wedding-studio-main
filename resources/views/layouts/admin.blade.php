@@ -15,9 +15,10 @@
         <li><a href="{{ route('admin.dashboard') }}" class="block hover:bg-blue-700 p-2 rounded">Dashboard</a></li>
         <li><a href="{{ route('admin.accounts') }}" class="block hover:bg-blue-700 p-2 rounded">Akun Terdaftar</a></li>
         <li><a href="{{ route('admin.calendar') }}" class="block hover:bg-blue-700 p-2 rounded">Kalender</a></li>
-        <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">services</a></li>
+        <li><a href="{{ route('admin.services') }}" class="block hover:bg-blue-700 p-2 rounded">services</a></li>
         <li><a href="{{ route('admin.about') }}" class="block hover:bg-blue-700 p-2 rounded">about</a></li>
-        <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">contact</a></li>
+        <li><a href="{{ route('admin.contact') }}" class="block hover:bg-blue-700 p-2 rounded">contact</a></li>
+        <li><a href="{{ route('admin.portofolio') }}" class="block hover:bg-blue-700 p-2 rounded">portofolio</a></li>
         <li>
         <li>
         <form action="{{ route('logout') }}" method="POST">
