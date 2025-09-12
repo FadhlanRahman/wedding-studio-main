@@ -34,36 +34,24 @@
                 <h2 class="text-4xl font-bold text-blue-600 mb-6 text-center">Tim Kami</h2>
 
                 <div class="grid grid-cols-3 gap-6">
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim1.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Ellen</h4>
-                        <p class="text-gray-500 text-sm">Founder & MUA</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim2.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Fadhlan</h4>
-                        <p class="text-gray-500 text-sm">Fotografer</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim3.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Faishal</h4>
-                        <p class="text-gray-500 text-sm">Event Organizer</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim3.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Faishal</h4>
-                        <p class="text-gray-500 text-sm">Event Organizer</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim3.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Faishal</h4>
-                        <p class="text-gray-500 text-sm">Event Organizer</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <img src="{{ asset('team/tim3.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                        <h4 class="font-semibold text-gray-800">Faishal</h4>
-                        <p class="text-gray-500 text-sm">Event Organizer</p>
-                    </div>
+                    @forelse($teams as $team)
+                        <div class="flex flex-col items-center">
+                            {{-- Foto --}}
+                            @if($team->photo)
+                                <img src="{{ asset('storage/'.$team->photo) }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
+                            @else
+                                <img src="{{ asset('team/default.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
+                            @endif
+
+                            {{-- Nama & Role --}}
+                            <h4 class="font-semibold text-gray-800">{{ $team->name }}</h4>
+                            <p class="text-gray-500 text-sm">{{ $team->role }}</p>
+                        </div>
+                    @empty
+                        <p class="col-span-3 text-center text-gray-500 italic">
+                            Belum ada anggota tim yang ditambahkan.
+                        </p>
+                    @endforelse
                 </div>
             </div>
         </div>

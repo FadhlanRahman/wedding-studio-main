@@ -111,6 +111,7 @@
     <div class="mt-10 bg-white rounded-2xl shadow-lg p-6">
         <h2 class="text-xl font-semibold mb-4 text-gray-700">📆 Kalender Booking</h2>
         <div id="calendar"></div>
+        <div id="calendar"></div>
     </div>
 </div>
 @endsection
@@ -135,3 +136,4 @@
     });
 </script>
 @endpush
+        <div id="calendar"></div>
