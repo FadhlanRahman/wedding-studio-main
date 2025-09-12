@@ -10,6 +10,7 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookingController;
 
+
 // ====================
 // HALAMAN UTAMA (USER)
 // ====================
@@ -17,16 +18,17 @@ Route::middleware(['auth', 'user'])->group(function () {
     // Halaman utama
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
-    Route::get('/services', [ServicesController::class, 'index'])->name('services');
+    Route::get('/services', [ServicesController::class, 'index'])->name('services'); // ✅ disesuaikan agar sama dengan navbar
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
     // Booking user
     Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store'); // <= disesuaikan
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 });
 
 // Halaman Tentang (bisa diakses tanpa login)
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
 
 // ====================
 // AUTENTIKASI
@@ -36,6 +38,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // ====================
 // HALAMAN ADMIN
@@ -51,25 +54,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/accounts/{user}', [AdminController::class, 'destroy'])->name('admin.accounts.destroy');
 
     // Kalender Booking (ADMIN)
-    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar'); // <= disesuaikan
+    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
 
     // About
-    Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about'); // <= disesuaikan
+    Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about');
 
-    // contact
-    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact'); // <= disesuaikan
+    // Contact
+    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact');
 
-    // services
-    Route::get('/admin/services', [AdminController::class, 'services'])->name('admin.services'); // <= disesuaikan
+    // ====================
+    // Services (CRUD)
+    // ====================
+    Route::prefix('admin/services')->name('admin.services.')->group(function () {
+        Route::get('/', [ServicesController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [ServicesController::class, 'create'])->name('create');
+        Route::post('/', [ServicesController::class, 'store'])->name('store');
+        Route::get('/{service}/edit', [ServicesController::class, 'edit'])->name('edit');
+        Route::put('/{service}', [ServicesController::class, 'update'])->name('update');
+        Route::delete('/{service}', [ServicesController::class, 'destroy'])->name('destroy');
+    });
 
-    // portofolio
-    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio'); // <= disesuaikan
+    // Portofolio
+    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio');
 
     // Profil Admin
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
 
     // =========================
-    // Booking Admin (pakai controller yang sama)
+    // Booking Admin
     // =========================
     Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
     Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit');
