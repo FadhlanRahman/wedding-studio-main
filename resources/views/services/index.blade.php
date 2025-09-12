@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <section class="relative min-h-screen bg-wallpaper">
   {{-- Soft blob --}}
   <div aria-hidden class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -12,58 +11,37 @@
   <div class="relative z-10 py-20">
     {{-- Header --}}
     <header class="text-center mb-14 fade-in-up">
-      <h1 class="mt-4 text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
+      <h1 class="mt-4 text-4xl md:text-5xl font-bold text-white drop-shadow-xl">
         Our Wedding Services
       </h1>
-      <p class="mt-3 text-gray-200/90 max-w-2xl mx-auto text-lg">
+      <p class="mt-3 text-gray-200 max-w-2xl mx-auto text-lg drop-shadow-md">
         Layanan profesional kami siap membantu mewujudkan pernikahan impian Anda.
       </p>
     </header>
 
     {{-- Services Grid --}}
-    <div class="max-w-6xl mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
-      @php
-        $services = [
-          ['title'=>'Makeup & Hairdo','desc'=>'Tampilan natural hingga glam sesuai karakter dan tema pernikahan Anda.','price'=>'Rp 1.500.000','icon'=>'💄'],
-          ['title'=>'Wedding Photography','desc'=>'Dokumentasi prewedding dan hari H dengan hasil profesional.','price'=>'Rp 3.000.000','icon'=>'📸'],
-          ['title'=>'Bridal Gown & Suit','desc'=>'Sewa gaun pengantin dan jas terbaik sesuai tema Anda.','price'=>'Rp 2.500.000','icon'=>'👗'],
-          ['title'=>'Venue Decoration','desc'=>'Dekorasi tempat pernikahan elegan dan sesuai tema.','price'=>'Rp 5.000.000','icon'=>'🎀'],
-          ['title'=>'Catering & Cake','desc'=>'Menu lezat dan cake cantik untuk tamu undangan.','price'=>'Rp 7.500.000','icon'=>'🎂'],
-          ['title'=>'Wedding Planner','desc'=>'Koordinasi acara supaya berjalan lancar tanpa stress.','price'=>'Rp 4.000.000','icon'=>'📋'],
-        ];
-      @endphp
-
+    <div class="max-w-6xl mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6 justify-items-center">
       @foreach ($services as $service)
-      <article class="service-card group relative rounded-2xl p-7 fade-in-up overflow-hidden">
-        {{-- Price --}}
-        <div class="price-badge">
-          <span>{{ $service['price'] }}</span>
-        </div>
-
-        {{-- Isi card --}}
-        <div class="flex flex-col items-center text-center relative z-10">
-          <div class="icon-bubble">
-            <span class="text-4xl">{{ $service['icon'] }}</span>
+        <article class="service-card group relative w-full max-w-sm rounded-2xl p-7 fade-in-up overflow-hidden">
+          <div class="price-badge">
+            <span>Rp {{ number_format($service->price, 0, ',', '.') }}</span>
           </div>
-          <h3 class="mt-4 text-xl font-bold text-slate-800">{{ $service['title'] }}</h3>
-          <p class="mt-2 text-slate-600 text-sm">{{ $service['desc'] }}</p>
-        </div>
 
-        <div class="mt-6 flex items-center justify-center gap-3 relative z-10">
-          <a href="{{ route('booking.create') }}" class="btn-primary">Book Now</a>
-          <a href="#" class="btn-ghost">Detail</a>
-        </div>
-
-        {{-- Sheen effect --}}
-        <span class="sheen"></span>
-      </article>
+          <div class="flex flex-col items-center text-center relative z-10">
+            <div class="icon-bubble">
+              <span class="text-4xl">{{ $service->icon }}</span>
+            </div>
+            <h3 class="mt-4 text-xl font-bold text-slate-800">{{ $service->title }}</h3>
+            <p class="mt-2 text-slate-600 text-sm">{{ $service->description }}</p>
+          </div>
+        </article>
       @endforeach
     </div>
 
     {{-- CTA --}}
     <div class="text-center mt-16 fade-in-up">
       <a href="{{ route('booking.create') }}"
-         class="inline-flex items-center gap-2 btn-primary px-8 py-3 text-lg">
+         class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white font-semibold px-10 py-4 rounded-full shadow-lg transition-all text-lg">
         📅 Book Your Service
       </a>
     </div>
@@ -89,19 +67,21 @@
     top: -100px; left: -100px;
   }
 
-
-
   /* === Card transparan (glassmorphism) === */
   .service-card {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .service-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 30px rgba(33, 150, 243, 0.5); /* efek hover biru */
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(33, 150, 243, 0.5);
   }
 
   /* Icon bubble */
@@ -130,42 +110,18 @@
 
   /* Buttons */
   .btn-primary {
-  background-color: #1976d2;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
+    background-color: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
   }
-  .btn-primary:hover {  background-color: #0d47a1;
-  box-shadow: 0 0 15px rgba(33, 150, 243, 0.7); }
-
-  .btn-ghost {
-    border: 1px solid #e2e8f0;
-    background: rgba(255,255,255,.8);
-    color: #1e293b;
-    border-radius: .75rem;
-    padding: .55rem 1rem;
-    font-weight: 600;
-    backdrop-filter: blur(6px);
-    transition: transform .25s, background .25s;
-  }
-  .btn-ghost:hover { background: #fff; transform: translateY(-2px); }
-
-  /* Sheen effect */
-  .sheen {
-    position: absolute;
-    top: -50%; left: -150%;
-    width: 300%; height: 200%;
-    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.25) 50%, transparent 70%);
-    transform: rotate(20deg);
-    transition: transform 1s ease;
-    pointer-events: none;
-  }
-  .service-card:hover .sheen {
-    transform: translateX(80%) rotate(20deg);
+  .btn-primary:hover {
+    background-color: #0d47a1;
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.7);
   }
 
   /* Fade-in animation */
@@ -177,7 +133,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const items = document.querySelectorAll('.fade-in-up');
   const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } });
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('show');
+        io.unobserve(e.target);
+      }
+    });
   }, { threshold: .15 });
   items.forEach(el => io.observe(el));
 });

@@ -3,20 +3,88 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Service;
 
 class ServicesController extends Controller
 {
-    public function index()
-    {
-        $services = [
-            ['title'=>'Makeup & Hairdo', 'desc'=>'Tampilan natural hingga glam sesuai karakter dan tema pernikahan Anda.', 'price'=>'Rp 1.500.000', 'icon'=>'💄'],
-            ['title'=>'Wedding Photography', 'desc'=>'Dokumentasi prewedding dan hari H dengan hasil profesional.', 'price'=>'Rp 3.000.000', 'icon'=>'📸'],
-            ['title'=>'Bridal Gown & Suit', 'desc'=>'Sewa gaun pengantin dan jas terbaik sesuai tema Anda.', 'price'=>'Rp 2.500.000', 'icon'=>'👗'],
-            ['title'=>'Venue Decoration', 'desc'=>'Dekorasi tempat pernikahan elegan dan sesuai tema.', 'price'=>'Rp 5.000.000', 'icon'=>'🎀'],
-            ['title'=>'Catering & Cake', 'desc'=>'Menu lezat dan cake cantik untuk tamu undangan.', 'price'=>'Rp 7.500.000', 'icon'=>'🎂'],
-            ['title'=>'Wedding Planner', 'desc'=>'Koordinasi acara supaya berjalan lancar tanpa stress.', 'price'=>'Rp 4.000.000', 'icon'=>'📋'],
-        ];
+    /**
+     * =====================
+     * FRONTEND (User)
+     * =====================
+     */
+public function index()
+{
+    $services = Service::all();
+    return view('services.index', compact('services'));
+}
 
-        return view('services.index', compact('services'));
+    /**
+     * =====================
+     * BACKEND (Admin)
+     * =====================
+     */
+    public function adminIndex()
+    {
+        // Ambil data dengan pagination
+        $services = Service::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.services.index', compact('services'));
+    }
+
+    public function create()
+    {
+        return view('admin.services.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'price'       => 'required|numeric',
+            'icon'        => 'nullable|string',
+        ]);
+
+        Service::create([
+            'title'       => $request->title,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'icon'        => $request->icon,
+        ]);
+
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil ditambahkan!');
+    }
+
+    public function edit(Service $service)
+    {
+        return view('admin.services.edit', compact('service'));
+    }
+
+    public function update(Request $request, Service $service)
+    {
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'price'       => 'required|numeric',
+            'icon'        => 'nullable|string',
+        ]);
+
+        $service->update([
+            'title'       => $request->title,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'icon'        => $request->icon,
+        ]);
+
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil diperbarui!');
+    }
+
+    public function destroy(Service $service)
+    {
+        $service->delete();
+
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil dihapus!');
     }
 }
