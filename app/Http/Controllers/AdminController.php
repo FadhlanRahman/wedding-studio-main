@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\Team; // <--- tambahkan model Team
 
 class AdminController extends Controller
 {
@@ -13,7 +14,6 @@ class AdminController extends Controller
     // =================
     public function index()
     {
-        // Ambil semua booking untuk hitung total income
         $bookings     = Booking::orderBy('booking_date', 'asc')->get();
         $totalIncome  = $bookings->sum('total_price');
         $totalUsers   = User::count();
@@ -65,37 +65,93 @@ class AdminController extends Controller
     // =================
     public function calendar()
     {
-        // Gunakan paginate agar bisa dipanggil dengan ->links() di Blade
         $bookings = Booking::orderBy('booking_date', 'asc')->paginate(10);
-
         return view('admin.calendar', compact('bookings'));
     }
 
-    //about admin//
-        public function about()
+    // =================
+    // About Admin Panel
+    // =================
+    public function about()
     {
-        return view('admin.about'); 
+        $teams = Team::all();
+        return view('admin.about', compact('teams')); 
     }
 
-    //contact admin//
-        public function contact()
+    // === Team ===
+    public function storeTeam(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        Team::create([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil ditambahkan!');
+    }
+
+    public function updateTeam(Request $request, Team $team)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = $team->photo;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        $team->update([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil diperbarui!');
+    }
+
+    public function destroyTeam(Team $team)
+    {
+        $team->delete();
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil dihapus!');
+    }
+
+    // =================
+    // Contact Admin Panel
+    // =================
+    public function contact()
     {
         return view('admin.contact'); 
     }
 
-    //services admin//
-        public function services()
+    // =================
+    // Services Admin Panel
+    // =================
+    public function services()
     {
         return view('admin.services'); 
     }
 
-    //about portofolio//
-        public function portofolio()
+    // =================
+    // Portofolio Admin Panel
+    // =================
+    public function portofolio()
     {
         return view('admin.portofolio'); 
     }
-
-
 
     // =================
     // Profil Admin
@@ -106,5 +162,3 @@ class AdminController extends Controller
         return view('admin.profile', compact('admin'));
     }
 }
-
-

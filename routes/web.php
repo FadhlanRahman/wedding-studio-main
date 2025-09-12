@@ -51,28 +51,34 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/accounts/{user}', [AdminController::class, 'destroy'])->name('admin.accounts.destroy');
 
     // Kalender Booking (ADMIN)
-    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar'); // <= disesuaikan
+    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar');
 
-    // About
-    Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about'); // <= disesuaikan
+    // ====================
+    // About (ADMIN PANEL)
+    // ====================
+    Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about');
+    Route::post('/admin/about/store', [AdminController::class, 'storeTeam'])->name('admin.team.store');
+    Route::post('/admin/about/update/{team}', [AdminController::class, 'updateTeam'])->name('admin.team.update');
+    Route::delete('/admin/about/delete/{team}', [AdminController::class, 'destroyTeam'])->name('admin.team.delete');
 
     // contact
-    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact'); // <= disesuaikan
+    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact');
 
     // services
-    Route::get('/admin/services', [AdminController::class, 'services'])->name('admin.services'); // <= disesuaikan
+    Route::get('/admin/services', [AdminController::class, 'services'])->name('admin.services');
 
     // portofolio
-    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio'); // <= disesuaikan
+    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio');
 
     // Profil Admin
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
 
     // =========================
-    // Booking Admin (pakai controller yang sama)
+    // Booking Admin
     // =========================
     Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
     Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit');
     Route::put('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update');
     Route::delete('/admin/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy');
 });
+
