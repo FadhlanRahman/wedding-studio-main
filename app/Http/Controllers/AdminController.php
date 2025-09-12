@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\Contact;
 
 class AdminController extends Controller
 {
@@ -71,31 +72,71 @@ class AdminController extends Controller
         return view('admin.calendar', compact('bookings'));
     }
 
-    //about admin//
-        public function about()
+    // =================
+    // Halaman About
+    // =================
+    public function about()
     {
         return view('admin.about'); 
     }
 
-    //contact admin//
-        public function contact()
+    // =================
+    // CRUD Contact
+    // =================
+    public function contactIndex()
     {
-        return view('admin.contact'); 
+        $contact = Contact::first();
+        return view('admin.contact.index', compact('contact'));
     }
 
-    //services admin//
-        public function services()
+    public function contactEdit()
+    {
+        $contact = Contact::first();
+        return view('admin.contact.edit', compact('contact'));
+    }
+
+    public function contactUpdate(Request $request)
+    {
+        $request->validate([
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email',
+            'address' => 'nullable|string',
+            'instagram' => 'nullable|string',
+            'whatsapp' => 'nullable|string',
+            'map_url' => 'nullable|string',
+        ]);
+
+        $contact = Contact::first();
+        if (!$contact) {
+            $contact = new Contact();
+        }
+
+        $contact->phone = $request->phone;
+        $contact->email = $request->email;
+        $contact->address = $request->address;
+        $contact->instagram = $request->instagram;
+        $contact->whatsapp = $request->whatsapp;
+        $contact->map_url = $request->map_url;
+        $contact->save();
+
+        return redirect()->route('admin.contact')->with('success', 'Kontak berhasil diperbarui.');
+    }
+
+    // =================
+    // Halaman Services
+    // =================
+    public function services()
     {
         return view('admin.services'); 
     }
 
-    //about portofolio//
-        public function portofolio()
+    // =================
+    // Halaman Portofolio
+    // =================
+    public function portofolio()
     {
         return view('admin.portofolio'); 
     }
-
-
 
     // =================
     // Profil Admin
@@ -106,5 +147,3 @@ class AdminController extends Controller
         return view('admin.profile', compact('admin'));
     }
 }
-
-

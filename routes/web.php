@@ -14,7 +14,6 @@ use App\Http\Controllers\BookingController;
 // HALAMAN UTAMA (USER)
 // ====================
 Route::middleware(['auth', 'user'])->group(function () {
-    // Halaman utama
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
     Route::get('/services', [ServicesController::class, 'index'])->name('services');
@@ -22,10 +21,10 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     // Booking user
     Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store'); // <= disesuaikan
+    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 });
 
-// Halaman Tentang (bisa diakses tanpa login)
+// Halaman Tentang
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // ====================
@@ -40,39 +39,41 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ====================
 // HALAMAN ADMIN
 // ====================
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 
     // Akun Terdaftar
-    Route::get('/admin/accounts', [AdminController::class, 'accounts'])->name('admin.accounts');
-    Route::get('/admin/accounts/{user}/edit', [AdminController::class, 'edit'])->name('admin.accounts.edit');
-    Route::put('/admin/accounts/{user}', [AdminController::class, 'update'])->name('admin.accounts.update');
-    Route::delete('/admin/accounts/{user}', [AdminController::class, 'destroy'])->name('admin.accounts.destroy');
+    Route::get('/accounts', [AdminController::class, 'accounts'])->name('accounts');
+    Route::get('/accounts/{user}/edit', [AdminController::class, 'edit'])->name('accounts.edit');
+    Route::put('/accounts/{user}', [AdminController::class, 'update'])->name('accounts.update');
+    Route::delete('/accounts/{user}', [AdminController::class, 'destroy'])->name('accounts.destroy');
 
-    // Kalender Booking (ADMIN)
-    Route::get('/admin/calendar', [AdminController::class, 'calendar'])->name('admin.calendar'); // <= disesuaikan
+    // Kalender Booking
+    Route::get('/calendar', [AdminController::class, 'calendar'])->name('calendar');
 
     // About
-    Route::get('/admin/about', [AdminController::class, 'about'])->name('admin.about'); // <= disesuaikan
+    Route::get('/about', [AdminController::class, 'about'])->name('about');
 
-    // contact
-    Route::get('/admin/contact', [AdminController::class, 'contact'])->name('admin.contact'); // <= disesuaikan
+    // ====================
+    // CONTACT (hanya 1 record di DB)
+    // ====================
+    Route::get('/contact', [AdminController::class, 'contactIndex'])->name('contact');
+    Route::get('/contact/edit', [AdminController::class, 'contactEdit'])->name('contact.edit');
+    Route::put('/contact/update', [AdminController::class, 'contactUpdate'])->name('contact.update');
 
-    // services
-    Route::get('/admin/services', [AdminController::class, 'services'])->name('admin.services'); // <= disesuaikan
+    // Services
+    Route::get('/services', [AdminController::class, 'services'])->name('services');
 
-    // portofolio
-    Route::get('/admin/portofolio', [AdminController::class, 'portofolio'])->name('admin.portofolio'); // <= disesuaikan
+    // Portofolio
+    Route::get('/portofolio', [AdminController::class, 'portofolio'])->name('portofolio');
 
     // Profil Admin
-    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
-    // =========================
-    // Booking Admin (pakai controller yang sama)
-    // =========================
-    Route::get('/admin/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
-    Route::get('/admin/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('admin.bookings.edit');
-    Route::put('/admin/bookings/{booking}', [BookingController::class, 'update'])->name('admin.bookings.update');
-    Route::delete('/admin/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy');
+    // Booking (ADMIN)
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
+    Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
 });

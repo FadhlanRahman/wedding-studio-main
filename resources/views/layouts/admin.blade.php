@@ -17,7 +17,7 @@
         <li><a href="{{ route('admin.calendar') }}" class="block hover:bg-blue-700 p-2 rounded">Kalender</a></li>
         <li><a href="{{ route('admin.services') }}" class="block hover:bg-blue-700 p-2 rounded">services</a></li>
         <li><a href="{{ route('admin.about') }}" class="block hover:bg-blue-700 p-2 rounded">about</a></li>
-        <li><a href="{{ route('admin.contact') }}" class="block hover:bg-blue-700 p-2 rounded">contact</a></li>
+        <li><a href="{{ route ('admin.contact') }}" class="block hover:bg-blue-700 p-2 rounded">contact</a></li>
         <li><a href="{{ route('admin.portofolio') }}" class="block hover:bg-blue-700 p-2 rounded">portofolio</a></li>
         <li>
         <li>
