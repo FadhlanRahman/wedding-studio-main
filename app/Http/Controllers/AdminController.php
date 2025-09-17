@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Contact;
+use App\Models\Team;
 
 class AdminController extends Controller
 {
@@ -14,7 +16,6 @@ class AdminController extends Controller
     // =================
     public function index()
     {
-        // Ambil semua booking untuk hitung total income
         $bookings     = Booking::orderBy('booking_date', 'asc')->get();
         $totalIncome  = $bookings->sum('total_price');
         $totalUsers   = User::count();
@@ -66,76 +67,87 @@ class AdminController extends Controller
     // =================
     public function calendar()
     {
-        // Gunakan paginate agar bisa dipanggil dengan ->links() di Blade
         $bookings = Booking::orderBy('booking_date', 'asc')->paginate(10);
-
         return view('admin.calendar', compact('bookings'));
     }
 
-    // =================
-    // Halaman About
-    // =================
-    public function about()
-    {
-        return view('admin.about'); 
-    }
+    
 
-    // =================
-    // CRUD Contact
-    // =================
-    public function contactIndex()
-    {
-        $contact = Contact::first();
-        return view('admin.contact.index', compact('contact'));
-    }
-
-    public function contactEdit()
-    {
-        $contact = Contact::first();
-        return view('admin.contact.edit', compact('contact'));
-    }
-
-    public function contactUpdate(Request $request)
-    {
-        $request->validate([
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email',
-            'address' => 'nullable|string',
-            'instagram' => 'nullable|string',
-            'whatsapp' => 'nullable|string',
-            'map_url' => 'nullable|string',
-        ]);
-
-        $contact = Contact::first();
-        if (!$contact) {
-            $contact = new Contact();
-        }
-
-        $contact->phone = $request->phone;
-        $contact->email = $request->email;
-        $contact->address = $request->address;
-        $contact->instagram = $request->instagram;
-        $contact->whatsapp = $request->whatsapp;
-        $contact->map_url = $request->map_url;
-        $contact->save();
-
-        return redirect()->route('admin.contact')->with('success', 'Kontak berhasil diperbarui.');
-    }
 
     // =================
     // Halaman Services
     // =================
     public function services()
     {
-        return view('admin.services'); 
+        return view('admin.services');
     }
 
+    // =================
+    // About Admin Panel
+    // =================
+    public function about()
+    {
+        $teams = Team::all();
+        return view('admin.about', compact('teams')); 
+    }
+
+    // === Team ===
+    public function storeTeam(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        Team::create([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil ditambahkan!');
+    }
+
+    public function updateTeam(Request $request, Team $team)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = $team->photo;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        $team->update([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil diperbarui!');
+    }
+
+    public function destroyTeam(Team $team)
+    {
+        $team->delete();
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil dihapus!');
+    }
+    
     // =================
     // Halaman Portofolio
     // =================
     public function portofolio()
     {
-        return view('admin.portofolio'); 
+        return view('admin.portofolio');
     }
 
     // =================

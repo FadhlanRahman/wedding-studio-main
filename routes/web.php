@@ -56,6 +56,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/about', [AdminController::class, 'about'])->name('about');
 
     // ====================
+    // TEAM MANAGEMENT
+    // ====================
+    Route::post('/team/store', [AdminController::class, 'storeTeam'])->name('team.store');
+    Route::post('/team/{team}/update', [AdminController::class, 'updateTeam'])->name('team.update');
+    Route::delete('/team/{team}/delete', [AdminController::class, 'destroyTeam'])->name('team.delete');
+
+    // ====================
     // CONTACT (hanya 1 record di DB)
     // ====================
     Route::get('/contact', [AdminController::class, 'contactIndex'])->name('contact');
