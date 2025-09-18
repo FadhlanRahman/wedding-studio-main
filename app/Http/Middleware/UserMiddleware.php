@@ -11,15 +11,17 @@ class UserMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-              // Cek apakah user sudah login dan punya role user
-        if (!Auth::check() || Auth::user()->role !== 'user') {
-            // Kalau bukan user, kembalikan ke halaman login atau home
-            return redirect('/')->with('error', 'Akses ditolak, hanya user yang bisa masuk.');
+        // Jika belum login, arahkan ke login
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Jika login tapi bukan user, arahkan ke dashboard admin
+        if (Auth::user()->role !== 'user') {
+            return redirect()->route('admin.dashboard')->with('error', 'Akses ditolak, hanya user yang bisa masuk.');
         }
 
         return $next($request);

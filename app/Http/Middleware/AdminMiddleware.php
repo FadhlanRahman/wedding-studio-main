@@ -11,15 +11,17 @@ class AdminMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah user sudah login dan punya role admin
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
-            // Kalau bukan admin, kembalikan ke halaman login atau home
-            return redirect('/admin')->with('error', 'Akses ditolak, hanya admin yang bisa masuk.');
+        // Jika belum login, arahkan ke login
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Jika login tapi bukan admin, arahkan ke halaman utama user
+        if (Auth::user()->role !== 'admin') {
+            return redirect()->route('home')->with('error', 'Akses ditolak, hanya admin yang bisa masuk.');
         }
 
         return $next($request);

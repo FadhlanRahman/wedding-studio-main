@@ -11,25 +11,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookingController;
 
 // ====================
-// HALAMAN UTAMA (USER)
+// HALAMAN UMUM (TANPA LOGIN)
 // ====================
-Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
-    Route::get('/services', [ServicesController::class, 'index'])->name('services');
-    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-
-    // Booking user
-    Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
-});
-
-// Halaman Tentang
 Route::get('/about', [AboutController::class, 'index'])->name('about');
-
-// ====================
-// AUTENTIKASI
-// ====================
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -37,43 +21,73 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ====================
+// HALAMAN USER
+// ====================
+Route::middleware(['auth', 'user'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
+    Route::get('/services', [ServicesController::class, 'index'])->name('services'); // <-- nama route diganti jadi "services"
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+    // Booking user
+    Route::prefix('booking')->name('booking.')->group(function () {
+        Route::get('/', [BookingController::class, 'create'])->name('create');
+        Route::post('/store', [BookingController::class, 'store'])->name('store');
+    });
+});
+
+// ====================
 // HALAMAN ADMIN
 // ====================
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Dashboard
-    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        // Dashboard
+        Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 
-    // Akun Terdaftar
-    Route::get('/accounts', [AdminController::class, 'accounts'])->name('accounts');
-    Route::get('/accounts/{user}/edit', [AdminController::class, 'edit'])->name('accounts.edit');
-    Route::put('/accounts/{user}', [AdminController::class, 'update'])->name('accounts.update');
-    Route::delete('/accounts/{user}', [AdminController::class, 'destroy'])->name('accounts.destroy');
+        // Akun Terdaftar
+        Route::prefix('accounts')->name('accounts.')->group(function () {
+            Route::get('/', [AdminController::class, 'accounts'])->name('index');
+            Route::get('/{user}/edit', [AdminController::class, 'edit'])->name('edit');
+            Route::put('/{user}', [AdminController::class, 'update'])->name('update');
+            Route::delete('/{user}', [AdminController::class, 'destroy'])->name('destroy');
+        });
 
-    // Kalender Booking
-    Route::get('/calendar', [AdminController::class, 'calendar'])->name('calendar');
+        // Kalender Booking
+        Route::get('/calendar', [AdminController::class, 'calendar'])->name('calendar');
 
-    // About
-    Route::get('/about', [AdminController::class, 'about'])->name('about');
+        // About (admin kelola konten about)
+        Route::get('/about', [AdminController::class, 'about'])->name('about');
 
-    // ====================
-    // CONTACT (hanya 1 record di DB)
-    // ====================
-    Route::get('/contact', [AdminController::class, 'contactIndex'])->name('contact');
-    Route::get('/contact/edit', [AdminController::class, 'contactEdit'])->name('contact.edit');
-    Route::put('/contact/update', [AdminController::class, 'contactUpdate'])->name('contact.update');
+        // Contact (1 record di DB)
+        Route::prefix('contact')->name('contact.')->group(function () {
+            Route::get('/', [AdminController::class, 'contactIndex'])->name('index');
+            Route::get('/edit', [AdminController::class, 'contactEdit'])->name('edit');
+            Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
+        });
 
-    // Services
-    Route::get('/services', [AdminController::class, 'services'])->name('services');
+        // Services (CRUD)
+        Route::prefix('services')->name('services.')->group(function () {
+            Route::get('/', [AdminController::class, 'servicesIndex'])->name('index');
+            Route::get('/create', [AdminController::class, 'servicesCreate'])->name('create');
+            Route::post('/', [AdminController::class, 'servicesStore'])->name('store');
+            Route::get('/{service}/edit', [AdminController::class, 'servicesEdit'])->name('edit');
+            Route::put('/{service}', [AdminController::class, 'servicesUpdate'])->name('update');
+            Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
+        });
 
-    // Portofolio
-    Route::get('/portofolio', [AdminController::class, 'portofolio'])->name('portofolio');
+        // Portofolio (admin kelola portofolio)
+        Route::get('/portofolio', [AdminController::class, 'portofolio'])->name('portofolio');
 
-    // Profil Admin
-    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+        // Profil Admin
+        Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
-    // Booking (ADMIN)
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
-    Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
-    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
-});
+        // Booking (ADMIN)
+        Route::prefix('bookings')->name('bookings.')->group(function () {
+            Route::get('/', [BookingController::class, 'index'])->name('index');
+            Route::get('/{booking}/edit', [BookingController::class, 'edit'])->name('edit');
+            Route::put('/{booking}', [BookingController::class, 'update'])->name('update');
+            Route::delete('/{booking}', [BookingController::class, 'destroy'])->name('destroy');
+        });
+    });

@@ -18,7 +18,7 @@
         {{-- Description --}}
         <div>
             <label class="block font-medium mb-1">Description</label>
-            <textarea name="desc" rows="4"
+            <textarea name="description" rows="4"
                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-blue-200" required>{{ $service->desc }}</textarea>
         </div>
 

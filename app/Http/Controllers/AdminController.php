@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Contact;
+use App\Models\Service;
 
 class AdminController extends Controller
 {
@@ -14,7 +15,6 @@ class AdminController extends Controller
     // =================
     public function index()
     {
-        // Ambil semua booking untuk hitung total income
         $bookings     = Booking::orderBy('booking_date', 'asc')->get();
         $totalIncome  = $bookings->sum('total_price');
         $totalUsers   = User::count();
@@ -66,9 +66,7 @@ class AdminController extends Controller
     // =================
     public function calendar()
     {
-        // Gunakan paginate agar bisa dipanggil dengan ->links() di Blade
         $bookings = Booking::orderBy('booking_date', 'asc')->paginate(10);
-
         return view('admin.calendar', compact('bookings'));
     }
 
@@ -98,36 +96,77 @@ class AdminController extends Controller
     public function contactUpdate(Request $request)
     {
         $request->validate([
-            'phone' => 'nullable|string|max:20',
-            'email' => 'nullable|email',
-            'address' => 'nullable|string',
-            'instagram' => 'nullable|string',
+            'phone'    => 'nullable|string|max:20',
+            'email'    => 'nullable|email',
+            'address'  => 'nullable|string',
+            'instagram'=> 'nullable|string',
             'whatsapp' => 'nullable|string',
-            'map_url' => 'nullable|string',
+            'map_url'  => 'nullable|string',
         ]);
 
-        $contact = Contact::first();
-        if (!$contact) {
-            $contact = new Contact();
-        }
-
-        $contact->phone = $request->phone;
-        $contact->email = $request->email;
-        $contact->address = $request->address;
-        $contact->instagram = $request->instagram;
-        $contact->whatsapp = $request->whatsapp;
-        $contact->map_url = $request->map_url;
+        $contact = Contact::first() ?? new Contact();
+        $contact->fill($request->only([
+            'phone', 'email', 'address', 'instagram', 'whatsapp', 'map_url'
+        ]));
         $contact->save();
 
         return redirect()->route('admin.contact')->with('success', 'Kontak berhasil diperbarui.');
     }
 
     // =================
-    // Halaman Services
+    // CRUD Services (pindahan dari ServicesController)
     // =================
-    public function services()
+    public function servicesIndex()
     {
-        return view('admin.services'); 
+        $services = Service::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.services.index', compact('services'));
+    }
+
+    public function servicesCreate()
+    {
+        return view('admin.services.create');
+    }
+
+    public function servicesStore(Request $request)
+    {
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'price'       => 'required|numeric',
+            'icon'        => 'nullable|string',
+        ]);
+
+        Service::create($request->only(['title', 'description', 'price', 'icon']));
+
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil ditambahkan!');
+    }
+
+    public function servicesEdit(Service $service)
+    {
+        return view('admin.services.edit', compact('service'));
+    }
+
+    public function servicesUpdate(Request $request, Service $service)
+    {
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'price'       => 'required|numeric',
+            'icon'        => 'nullable|string',
+        ]);
+
+        $service->update($request->only(['title', 'description', 'price', 'icon']));
+
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil diperbarui!');
+    }
+
+    public function servicesDestroy(Service $service)
+    {
+        $service->delete();
+        return redirect()->route('admin.services.index')
+                         ->with('success', 'Service berhasil dihapus!');
     }
 
     // =================
