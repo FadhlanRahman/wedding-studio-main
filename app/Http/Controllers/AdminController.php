@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Contact;
+<<<<<<< HEAD
 use App\Models\Service;
+=======
+use App\Models\Team;
+>>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
 class AdminController extends Controller
 {
@@ -70,14 +75,9 @@ class AdminController extends Controller
         return view('admin.calendar', compact('bookings'));
     }
 
-    // =================
-    // Halaman About
-    // =================
-    public function about()
-    {
-        return view('admin.about'); 
-    }
+    
 
+<<<<<<< HEAD
     // =================
     // CRUD Contact
     // =================
@@ -112,12 +112,15 @@ class AdminController extends Controller
 
         return redirect()->route('admin.contact')->with('success', 'Kontak berhasil diperbarui.');
     }
+=======
+>>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
     // =================
     // CRUD Services (pindahan dari ServicesController)
     // =================
     public function servicesIndex()
     {
+<<<<<<< HEAD
         $services = Service::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.services.index', compact('services'));
     }
@@ -167,14 +170,77 @@ class AdminController extends Controller
         $service->delete();
         return redirect()->route('admin.services.index')
                          ->with('success', 'Service berhasil dihapus!');
+=======
+        return view('admin.services');
+>>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
     }
 
+    // =================
+    // About Admin Panel
+    // =================
+    public function about()
+    {
+        $teams = Team::all();
+        return view('admin.about', compact('teams')); 
+    }
+
+    // === Team ===
+    public function storeTeam(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        Team::create([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil ditambahkan!');
+    }
+
+    public function updateTeam(Request $request, Team $team)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'role'  => 'required|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $photoPath = $team->photo;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('teams', 'public');
+        }
+
+        $team->update([
+            'name'  => $request->name,
+            'role'  => $request->role,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil diperbarui!');
+    }
+
+    public function destroyTeam(Team $team)
+    {
+        $team->delete();
+        return redirect()->route('admin.about')->with('success', 'Tim berhasil dihapus!');
+    }
+    
     // =================
     // Halaman Portofolio
     // =================
     public function portofolio()
     {
-        return view('admin.portofolio'); 
+        return view('admin.portofolio');
     }
 
     // =================

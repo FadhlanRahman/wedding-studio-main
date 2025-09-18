@@ -60,12 +60,28 @@ Route::middleware(['auth', 'admin'])
         // About (admin kelola konten about)
         Route::get('/about', [AdminController::class, 'about'])->name('about');
 
+<<<<<<< HEAD
         // Contact (1 record di DB)
         Route::prefix('contact')->name('contact.')->group(function () {
             Route::get('/', [AdminController::class, 'contactIndex'])->name('index');
             Route::get('/edit', [AdminController::class, 'contactEdit'])->name('edit');
             Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
         });
+=======
+    // ====================
+    // TEAM MANAGEMENT
+    // ====================
+    Route::post('/team/store', [AdminController::class, 'storeTeam'])->name('team.store');
+    Route::post('/team/{team}/update', [AdminController::class, 'updateTeam'])->name('team.update');
+    Route::delete('/team/{team}/delete', [AdminController::class, 'destroyTeam'])->name('team.delete');
+
+    // ====================
+    // CONTACT (hanya 1 record di DB)
+    // ====================
+    Route::get('/contact', [AdminController::class, 'contactIndex'])->name('contact');
+    Route::get('/contact/edit', [AdminController::class, 'contactEdit'])->name('contact.edit');
+    Route::put('/contact/update', [AdminController::class, 'contactUpdate'])->name('contact.update');
+>>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
         // Services (CRUD)
         Route::prefix('services')->name('services.')->group(function () {
