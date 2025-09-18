@@ -7,11 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Booking;
 use App\Models\Contact;
-<<<<<<< HEAD
 use App\Models\Service;
-=======
 use App\Models\Team;
->>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
 class AdminController extends Controller
 {
@@ -53,7 +50,7 @@ class AdminController extends Controller
             'email' => $request->email,
         ]);
 
-        return redirect()->route('admin.accounts')->with('success', 'Akun berhasil diperbarui!');
+        return redirect()->route('admin.accounts.index')->with('success', 'Akun berhasil diperbarui!');
     }
 
     public function destroy(User $user)
@@ -75,9 +72,6 @@ class AdminController extends Controller
         return view('admin.calendar', compact('bookings'));
     }
 
-    
-
-<<<<<<< HEAD
     // =================
     // CRUD Contact
     // =================
@@ -110,17 +104,14 @@ class AdminController extends Controller
         ]));
         $contact->save();
 
-        return redirect()->route('admin.contact')->with('success', 'Kontak berhasil diperbarui.');
+        return redirect()->route('admin.contact.index')->with('success', 'Kontak berhasil diperbarui.');
     }
-=======
->>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
     // =================
-    // CRUD Services (pindahan dari ServicesController)
+    // CRUD Services
     // =================
     public function servicesIndex()
     {
-<<<<<<< HEAD
         $services = Service::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.services.index', compact('services'));
     }
@@ -170,9 +161,6 @@ class AdminController extends Controller
         $service->delete();
         return redirect()->route('admin.services.index')
                          ->with('success', 'Service berhasil dihapus!');
-=======
-        return view('admin.services');
->>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
     }
 
     // =================

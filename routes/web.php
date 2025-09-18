@@ -2,18 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ServicesController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BookingController;
 
 // ====================
 // HALAMAN UMUM (TANPA LOGIN)
 // ====================
-Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+Route::get('/services', [HomeController::class, 'services'])->name('services');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -21,13 +21,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ====================
-// HALAMAN USER
+// HALAMAN USER (SETELAH LOGIN)
 // ====================
 Route::middleware(['auth', 'user'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
-    Route::get('/services', [ServicesController::class, 'index'])->name('services'); // <-- nama route diganti jadi "services"
-    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
     // Booking user
     Route::prefix('booking')->name('booking.')->group(function () {
@@ -60,28 +57,12 @@ Route::middleware(['auth', 'admin'])
         // About (admin kelola konten about)
         Route::get('/about', [AdminController::class, 'about'])->name('about');
 
-<<<<<<< HEAD
         // Contact (1 record di DB)
         Route::prefix('contact')->name('contact.')->group(function () {
             Route::get('/', [AdminController::class, 'contactIndex'])->name('index');
             Route::get('/edit', [AdminController::class, 'contactEdit'])->name('edit');
             Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
         });
-=======
-    // ====================
-    // TEAM MANAGEMENT
-    // ====================
-    Route::post('/team/store', [AdminController::class, 'storeTeam'])->name('team.store');
-    Route::post('/team/{team}/update', [AdminController::class, 'updateTeam'])->name('team.update');
-    Route::delete('/team/{team}/delete', [AdminController::class, 'destroyTeam'])->name('team.delete');
-
-    // ====================
-    // CONTACT (hanya 1 record di DB)
-    // ====================
-    Route::get('/contact', [AdminController::class, 'contactIndex'])->name('contact');
-    Route::get('/contact/edit', [AdminController::class, 'contactEdit'])->name('contact.edit');
-    Route::put('/contact/update', [AdminController::class, 'contactUpdate'])->name('contact.update');
->>>>>>> e28fd8bb743c00cba701f3fb81e439f162f747bd
 
         // Services (CRUD)
         Route::prefix('services')->name('services.')->group(function () {

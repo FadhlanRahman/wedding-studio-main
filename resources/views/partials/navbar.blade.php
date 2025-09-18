@@ -1,7 +1,7 @@
 {{-- resources/views/layouts/navbar.blade.php --}}
 <header class="bg-gradient-to-r from-blue-600 to-blue-800 shadow-md">
     <div class="max-w-8xl mx-auto px-6">
-        <div class="grid grid-cols-3  items-center h-16 w-full">
+        <div class="grid grid-cols-3 items-center h-16 w-full">
 
             {{-- Logo + Nama Studio --}}
             <a href="{{ route('home') }}" class="flex items-center space-x-3">
@@ -16,9 +16,10 @@
             {{-- Menu Utama (Desktop) --}}
             <div class="hidden md:flex space-x-8 items-center justify-center">
                 <a href="{{ route('home') }}" class="text-white hover:text-yellow-200 transition font-medium">Home</a>
-                <a href="{{ route('about') }}" class="text-white hover:text-yellow-200 transition font-medium">About</a>
-                <a href="{{ route('services') }}" class="text-white hover:text-yellow-200 transition font-medium">Services</a>
-                <a href="{{ route('contact') }}" class="text-white hover:text-yellow-200 transition font-medium">Contact</a>
+<a href="{{ route('about') }}" class="text-white hover:text-yellow-200 transition font-medium">About</a>
+<a href="{{ route('services') }}" class="text-white hover:text-yellow-200 transition font-medium">Services</a>
+<a href="{{ route('contact') }}" class="text-white hover:text-yellow-200 transition font-medium">Contact</a>
+
             </div>
 
             {{-- Login / Register atau Logout --}}
@@ -48,9 +49,10 @@
         {{-- Menu Mobile --}}
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
             <a href="{{ route('home') }}" class="block text-white hover:text-yellow-200 font-medium">Home</a>
-            <a href="{{ route('about') }}" class="block text-white hover:text-yellow-200 font-medium">About</a>
-            <a href="{{ route('services') }}" class="block text-white hover:text-yellow-200 font-medium">Services</a>
-            <a href="{{ route('contact') }}" class="block text-white hover:text-yellow-200 font-medium">Contact</a>
+<a href="{{ route('about') }}" class="text-white hover:text-yellow-200 transition font-medium">About</a>
+<a href="{{ route('services') }}" class="text-white hover:text-yellow-200 transition font-medium">Services</a>
+<a href="{{ route('contact') }}" class="text-white hover:text-yellow-200 transition font-medium">Contact</a>
+
             @auth
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
