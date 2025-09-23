@@ -68,7 +68,12 @@
                                 <option value="Event Organizer" {{ $team->role == 'Event Organizer' ? 'selected' : '' }}>Event Organizer</option>
                             </select>
 
+                            {{-- Update --}}
+                        <form action="{{ route('admin.team.update', $team->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT') {{-- ini penting biar Laravel baca sebagai PUT --}}
                             <input type="file" name="photo" class="border rounded-lg p-1 text-sm w-full">
+
                             <button type="submit" class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow hover:bg-yellow-600 active:scale-95 active:shadow-inner transition w-full">
                                 ✏️ Update
                             </button>
@@ -82,8 +87,7 @@
                                 🗑️ Delete
                             </button>
                         </form>
-                    </td>
-                </tr>
+
                 @empty
                 <tr>
                     <td colspan="4" class="p-6 text-center text-gray-500 italic">

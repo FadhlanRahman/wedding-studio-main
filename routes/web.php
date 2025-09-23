@@ -73,14 +73,15 @@ Route::middleware(['auth', 'admin'])
             Route::put('/{service}', [AdminController::class, 'servicesUpdate'])->name('update');
             Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
         });
+        
+        //team CRUD//
+        Route::prefix('team')->name('team.')->group(function () {
+        Route::get('/', [AdminController::class, 'about'])->name('index'); // sudah ada di AdminController
+        Route::post('/store', [AdminController::class, 'storeTeam'])->name('store');
+        Route::put('/update/{team}', [AdminController::class, 'updateTeam'])->name('update');
+        Route::delete('/delete/{team}', [AdminController::class, 'destroyTeam'])->name('delete');
+    });
 
-        // Team (CRUD)
-            Route::prefix('team')->name('team.')->group(function () {
-            Route::get('/', [AdminController::class, 'teamIndex'])->name('index');
-            Route::post('/store', [AdminController::class, 'teamStore'])->name('store');
-            Route::post('/update/{id}', [AdminController::class, 'teamUpdate'])->name('update');
-            Route::delete('/delete/{id}', [AdminController::class, 'teamDelete'])->name('delete');
-        });
 
 
         // Portofolio (admin kelola portofolio)
