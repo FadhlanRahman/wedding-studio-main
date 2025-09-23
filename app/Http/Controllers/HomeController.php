@@ -15,9 +15,10 @@ class HomeController extends Controller
 
     public function about()
     {
-        // arahkan ke view about/index.blade.php
-        return view('about.index');
+    $teams = \App\Models\Team::all();
+    return view('about.index', compact('teams'));
     }
+
 
     public function services()
     {

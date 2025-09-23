@@ -74,6 +74,15 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
         });
 
+        // Team (CRUD)
+            Route::prefix('team')->name('team.')->group(function () {
+            Route::get('/', [AdminController::class, 'teamIndex'])->name('index');
+            Route::post('/store', [AdminController::class, 'teamStore'])->name('store');
+            Route::post('/update/{id}', [AdminController::class, 'teamUpdate'])->name('update');
+            Route::delete('/delete/{id}', [AdminController::class, 'teamDelete'])->name('delete');
+        });
+
+
         // Portofolio (admin kelola portofolio)
         Route::get('/portofolio', [AdminController::class, 'portofolio'])->name('portofolio');
 

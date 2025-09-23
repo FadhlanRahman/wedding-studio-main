@@ -33,26 +33,27 @@
             <div class="w-1/2 p-10 flex flex-col justify-center">
                 <h2 class="text-4xl font-bold text-blue-600 mb-6 text-center">Tim Kami</h2>
 
-                <div class="grid grid-cols-3 gap-6">
-                    @forelse($teams as $team)
+                    <div class="grid grid-cols-3 gap-6">
+                        @forelse($teams as $team)
                         <div class="flex flex-col items-center">
-                            {{-- Foto --}}
-                            @if($team->photo)
-                                <img src="{{ asset('storage/'.$team->photo) }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                            @else
-                                <img src="{{ asset('team/default.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
-                            @endif
+                        {{-- Foto --}}
+                        @if($team->photo)
+                            <img src="{{ asset('storage/'.$team->photo) }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
+                        @else
+                            <img src="{{ asset('team/default.jpg') }}" class="w-28 h-28 rounded-full object-cover shadow-lg mb-2">
+                        @endif
 
-                            {{-- Nama & Role --}}
-                            <h4 class="font-semibold text-gray-800">{{ $team->name }}</h4>
-                            <p class="text-gray-500 text-sm">{{ $team->role }}</p>
-                        </div>
-                    @empty
-                        <p class="col-span-3 text-center text-gray-500 italic">
-                            Belum ada anggota tim yang ditambahkan.
-                        </p>
-                    @endforelse
-                </div>
+                        {{-- Nama & Role --}}
+                        <h4 class="font-semibold text-gray-800">{{ $team->name }}</h4>
+                        <p class="text-gray-500 text-sm">{{ $team->role }}</p>
+                    </div>
+                @empty
+                    <p class="col-span-3 text-center text-gray-500 italic">
+                        Belum ada anggota tim yang ditambahkan.
+                    </p>
+                @endforelse
+            </div>
+
             </div>
         </div>
     </div>
