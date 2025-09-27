@@ -11,10 +11,10 @@ return new class extends Migration {
             $table->id();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->text('address')->nullable();
+            $table->text('address')->nullable();   // ✅ ubah ke text
             $table->string('instagram')->nullable();
             $table->string('whatsapp')->nullable();
-            $table->string('map_url')->nullable();
+            $table->text('map_url')->nullable();   // ✅ ubah ke text
             $table->timestamps();
         });
     }

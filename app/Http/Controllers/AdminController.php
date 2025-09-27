@@ -107,6 +107,17 @@ class AdminController extends Controller
         return redirect()->route('admin.contact.index')->with('success', 'Kontak berhasil diperbarui.');
     }
 
+    public function contactDestroy()
+    {
+        $contact = Contact::first();
+        if ($contact) {
+            $contact->delete();
+        }
+
+        return redirect()->route('admin.contact.index')->with('success', 'Kontak berhasil dihapus.');
+    }
+
+
     // =================
     // CRUD Services
     // =================
@@ -221,14 +232,6 @@ class AdminController extends Controller
     {
         $team->delete();
         return redirect()->route('admin.about')->with('success', 'Tim berhasil dihapus!');
-    }
-    
-    // =================
-    // Halaman Portofolio
-    // =================
-    public function portofolio()
-    {
-        return view('admin.portofolio');
     }
 
     // =================

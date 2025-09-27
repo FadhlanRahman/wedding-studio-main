@@ -18,7 +18,7 @@
             <li><a href="{{ route('admin.services.index') }}" class="block hover:bg-blue-700 p-2 rounded">Services</a></li>
             <li><a href="{{ route('admin.about') }}" class="block hover:bg-blue-700 p-2 rounded">About</a></li>
             <li><a href="{{ route('admin.contact.index') }}" class="block hover:bg-blue-700 p-2 rounded">Contact</a></li>
-            <li><a href="{{ route('admin.portofolio') }}" class="block hover:bg-blue-700 p-2 rounded">Portofolio</a></li>
+            <li><a href="#" class="block hover:bg-blue-700 p-2 rounded">Testimoni</a></li>
             <li>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
