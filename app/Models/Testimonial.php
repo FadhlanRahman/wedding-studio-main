@@ -9,10 +9,5 @@ class Testimonial extends Model
 {
     use HasFactory;
 
-    // Tambahkan field yang boleh diisi (mass assignment)
-    protected $fillable = [
-        'name',
-        'email',
-        'message',
-    ];
+    protected $fillable = ['name', 'email', 'message', 'rating'];
 }

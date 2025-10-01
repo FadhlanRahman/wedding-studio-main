@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\Contact;
 use App\Models\Service;
 use App\Models\Team;
+use App\Models\Testimonial;
 
 class AdminController extends Controller
 {
@@ -71,14 +72,14 @@ class AdminController extends Controller
         $bookings = Booking::orderBy('booking_date', 'asc')->paginate(10);
         return view('admin.calendar', compact('bookings'));
     }
-
     // =================
-    // CRUD Contact
+    // Kontak + Testimoni
     // =================
     public function contactIndex()
     {
         $contact = Contact::first();
-        return view('admin.contact.index', compact('contact'));
+        $testimonials = Testimonial::latest()->get(); // ✅ ambil semua testimoni
+        return view('admin.contact.index', compact('contact', 'testimonials'));
     }
 
     public function contactEdit()
@@ -107,16 +108,31 @@ class AdminController extends Controller
         return redirect()->route('admin.contact.index')->with('success', 'Kontak berhasil diperbarui.');
     }
 
-    public function contactDestroy()
+    public function testimonialDestroy($id)
     {
-        $contact = Contact::first();
-        if ($contact) {
-            $contact->delete();
-        }
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->delete();
 
-        return redirect()->route('admin.contact.index')->with('success', 'Kontak berhasil dihapus.');
+        return redirect()->back()->with('success', 'Testimoni berhasil dihapus.');
     }
 
+        public function publish($id)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->is_published = true;
+        $testimonial->save();
+
+        return redirect()->back()->with('success', 'Testimoni berhasil ditampilkan di halaman user!');
+    }
+
+    public function unpublish($id)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->is_published = false;
+        $testimonial->save();
+
+        return redirect()->back()->with('success', 'Testimoni disembunyikan dari halaman user!');
+    }
 
     // =================
     // CRUD Services
@@ -243,3 +259,4 @@ class AdminController extends Controller
         return view('admin.profile', compact('admin'));
     }
 }
+    

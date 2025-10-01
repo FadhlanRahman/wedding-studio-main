@@ -3,22 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Service; // pastikan model Service ada
+use App\Models\Service; 
+use App\Models\Testimonial; // ✅ tambahkan model Testimonial
 
 class HomeController extends Controller
 {
     public function index()
     {
+        // Ambil testimoni yang sudah dipublish
+        $testimonials = Testimonial::where('is_published', true)
+            ->latest()
+            ->get();
+
         // arahkan ke view home/index.blade.php
-        return view('home.index');
+        return view('home.index', compact('testimonials'));
     }
 
     public function about()
     {
-    $teams = \App\Models\Team::all();
-    return view('about.index', compact('teams'));
+        $teams = \App\Models\Team::all();
+        return view('about.index', compact('teams'));
     }
-
 
     public function services()
     {

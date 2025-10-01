@@ -122,50 +122,48 @@
     </div>
   </section>
 
-  {{-- ============== TESTIMONI ============== --}}
-  <section class="py-16 bg-gradient-to-b from-slate-50 to-white">
-    <div class="container mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto">
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Apa Kata Klien</h2>
-        <p class="mt-3 text-slate-600">Cerita singkat dari hari bahagia mereka.</p>
-      </div>
+    {{-- ============== TESTIMONI ============== --}}
+    <section class="py-16 bg-gradient-to-b from-slate-50 to-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Apa Kata Klien</h2>
+          <p class="mt-3 text-slate-600">Cerita singkat dari hari bahagia mereka.</p>
+        </div>
 
-      <div
-        x-data='{
-          i: 0,
-          slides: [
-            {"text": "Makeup flawless & dokumentasi menyentuh. Hari kami jadi sangat berkesan!", "name": "Arina & Dimas"},
-            {"text": "Tim sangat profesional, foto & videonya benar-benar mengabadikan momen.", "name": "Rina & Bagas"},
-            {"text": "Pelayanan ramah, hasil rias bikin percaya diri di hari spesial. Recommended!", "name": "Maya & Budi"}
-          ],
-          next(){ this.i = (this.i + 1) % this.slides.length },
-          set(n){ this.i = n }
-        }'
-        x-init="setInterval(()=>next(), 5000)"
-        class="mt-10 max-w-3xl mx-auto"
-      >
-        <div class="relative">
-          <div class="rounded-2xl bg-white shadow-xl ring-1 ring-slate-200 p-8">
-            <div class="flex justify-center mb-3">
-              <div class="flex text-yellow-400 text-xl">★ ★ ★ ★ ★</div>
+        <div 
+          x-data="{ i: 0, slides: {{ $testimonials->map(fn($t) => ['text' => $t->message, 'name' => $t->name, 'rating' => $t->rating])->toJson() }} }"
+          x-init="setInterval(() => { i = (i + 1) % slides.length }, 5000)"
+          class="mt-10 max-w-3xl mx-auto"
+        >
+          <div class="relative">
+            <div class="rounded-2xl bg-white shadow-xl ring-1 ring-slate-200 p-8">
+              
+              {{-- Rating Bintang --}}
+              <div class="flex justify-center mb-3">
+                <template x-for="n in 5" :key="n">
+                  <span class="text-xl" 
+                        :class="n <= slides[i].rating ? 'text-yellow-400' : 'text-gray-300'">★</span>
+                </template>
+              </div>
+
+              <p class="text-lg text-slate-700 italic min-h-[88px]" x-text="slides[i].text"></p>
+              <p class="mt-4 font-semibold text-blue-700" x-text="'— ' + slides[i].name"></p>
             </div>
-            <p class="text-lg text-slate-700 italic min-h-[88px]" x-text="slides[i].text"></p>
-            <p class="mt-4 font-semibold text-blue-700" x-text="'— ' + slides[i].name"></p>
-          </div>
 
-          {{-- navigasi --}}
-          <div class="mt-6 flex items-center justify-center gap-2">
-            <template x-for="(s, idx) in slides" :key="idx">
-              <button @click="set(idx)"
-                class="h-2.5 w-2.5 rounded-full transition"
-                :class="i===idx ? 'bg-blue-600 w-6' : 'bg-slate-300 hover:bg-slate-400'">
-              </button>
-            </template>
+            {{-- Navigasi --}}
+            <div class="mt-6 flex items-center justify-center gap-2">
+              <template x-for="(s, idx) in slides" :key="idx">
+                <button @click="i = idx"
+                  class="h-2.5 w-2.5 rounded-full transition"
+                  :class="i===idx ? 'bg-blue-600 w-6' : 'bg-slate-300 hover:bg-slate-400'">
+                </button>
+              </template>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
 
   {{-- ============== MINI PORTOFOLIO ============== --}}
   <section class="py-16">

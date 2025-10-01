@@ -7,8 +7,8 @@ use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\TestimonialController; // ✅ tambahkan
-use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController; // ✅ admin
+use App\Http\Controllers\TestimonialController; // ✅ user
+
 
 // ====================
 // HALAMAN UMUM (TANPA LOGIN)
@@ -20,7 +20,7 @@ Route::get('/services', [HomeController::class, 'services'])->name('services');
 // ✅ Routing contact untuk user
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 
-// ✅ User submit testimonial
+// ✅ User submit testimonial (form kirim testimoni)
 Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -66,12 +66,19 @@ Route::middleware(['auth', 'admin'])
         // About (admin kelola konten about)
         Route::get('/about', [AdminController::class, 'about'])->name('about');
 
-        // Contact (1 record di DB)
+        // Contact + Testimoni
         Route::prefix('contact')->name('contact.')->group(function () {
             Route::get('/', [AdminController::class, 'contactIndex'])->name('index');
             Route::get('/edit', [AdminController::class, 'contactEdit'])->name('edit');
             Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
             Route::delete('/delete', [AdminController::class, 'contactDestroy'])->name('destroy');
+
+            // ✅ Testimoni CRUD (admin kelola testimoni user)
+            Route::prefix('testimonial')->name('testimonial.')->group(function () {
+                Route::delete('/{id}', [AdminController::class, 'destroy'])->name('destroy');
+                Route::post('/{id}/publish', [AdminController::class, 'publish'])->name('publish');
+                Route::post('/{id}/unpublish', [AdminController::class, 'unpublish'])->name('unpublish');
+            });
         });
 
         // Services (CRUD)
@@ -102,7 +109,4 @@ Route::middleware(['auth', 'admin'])
             Route::put('/{booking}', [BookingController::class, 'update'])->name('update');
             Route::delete('/{booking}', [BookingController::class, 'destroy'])->name('destroy');
         });
-
-        // ✅ Testimonial Admin CRUD
-        Route::resource('testimonials', AdminTestimonialController::class);
     });
