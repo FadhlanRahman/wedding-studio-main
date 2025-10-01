@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Service; // ✅ tambahkan
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -12,7 +13,8 @@ class BookingController extends Controller
      */
     public function create()
     {
-        return view('booking.create');
+        $services = Service::all(); // ✅ ambil semua services
+        return view('booking.create', compact('services'));
     }
 
     /**
@@ -26,13 +28,15 @@ class BookingController extends Controller
             'birth_date'     => 'required|date',
             'booking_date'   => 'required|date|unique:bookings,booking_date',
             'phone'          => 'required|string|max:15',
-            'service'        => 'required|string|max:255',
-            'total_price'    => 'nullable|numeric',
+            'service_id'     => 'required|exists:services,id', // ✅ ganti ke service_id
             'payment_method' => 'nullable|string',
             'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $service = Service::findOrFail($request->service_id);
+
         $data = $request->except(['payment_proof']);
+        $data['total_price'] = $service->price; // ✅ harga otomatis dari service
 
         // Upload foto bukti pembayaran
         if ($request->hasFile('payment_proof')) {
@@ -55,7 +59,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::latest()->paginate(10); // gunakan paginate agar rapi
+        $bookings = Booking::latest()->paginate(10);
         return view('admin.bookings.calender', compact('bookings'));
     }
 
@@ -73,7 +77,8 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking)
     {
-        return view('admin.bookings.edit', compact('booking'));
+        $services = Service::all(); // ✅ supaya bisa pilih ulang service saat edit
+        return view('admin.bookings.edit', compact('booking', 'services'));
     }
 
     /**
@@ -87,16 +92,17 @@ class BookingController extends Controller
             'birth_date'     => 'nullable|date',
             'booking_date'   => 'required|date|unique:bookings,booking_date,' . $booking->id,
             'phone'          => 'nullable|string|max:20',
-            'service'        => 'required|string|max:255',
-            'total_price'    => 'nullable|numeric',
+            'service_id'     => 'required|exists:services,id', // ✅ ganti ke service_id
             'payment_method' => 'nullable|string',
             'payment_status' => 'in:unpaid,pending,paid',
             'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->except(['payment_proof']);
+        $service = Service::findOrFail($request->service_id);
 
-        // Upload ulang bukti pembayaran jika ada
+        $data = $request->except(['payment_proof']);
+        $data['total_price'] = $service->price; // ✅ update harga sesuai service
+
         if ($request->hasFile('payment_proof')) {
             $filename = time().'_'.$request->file('payment_proof')->getClientOriginalName();
             $request->file('payment_proof')->move(public_path('uploads/payments'), $filename);
@@ -105,7 +111,7 @@ class BookingController extends Controller
 
         $booking->update($data);
 
-        return redirect()->route('admin.calendar') // supaya balik ke kalender setelah update
+        return redirect()->route('admin.calendar')
             ->with('success', 'Booking berhasil diperbarui.');
     }
 
@@ -129,7 +135,7 @@ class BookingController extends Controller
         $events = $bookings->map(function ($booking) {
             return [
                 'id'    => $booking->id,
-                'title' => $booking->full_name . ' - ' . ucfirst($booking->service),
+                'title' => $booking->full_name . ' - ' . ucfirst($booking->service->name ?? '-'),
                 'start' => $booking->booking_date,
                 'color' => $booking->payment_status === 'paid' ? 'green' : 'red'
             ];

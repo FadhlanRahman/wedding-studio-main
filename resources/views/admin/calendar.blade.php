@@ -32,14 +32,13 @@
                     <td class="p-3 text-gray-600">
                         {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}
                     </td>
-                    <td class="p-3">{{ $booking->service }}</td>
+
+                    <!-- ✅ Ganti dengan relasi service -->
+                    <td class="p-3">{{ $booking->service->title ?? '-' }}</td>
                     <td class="p-3 font-semibold text-blue-700">
-                        @if($booking->total_price)
-                            Rp {{ number_format($booking->total_price, 0, ',', '.') }}
-                        @else
-                            <span class="text-gray-400 italic">Belum ditentukan</span>
-                        @endif
+                        Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}
                     </td>
+
                     <td class="p-3">{{ $booking->payment_method ?? '-' }}</td>
 
                     <!-- Kolom Status + Approval -->
@@ -111,7 +110,6 @@
     <div class="mt-10 bg-white rounded-2xl shadow-lg p-6">
         <h2 class="text-xl font-semibold mb-4 text-gray-700">📆 Kalender Booking</h2>
         <div id="calendar"></div>
-        <div id="calendar"></div>
     </div>
 </div>
 @endsection
@@ -125,7 +123,7 @@
             initialView: 'dayGridMonth',
             events: {!! $bookings->map(function($booking) {
                 return [
-                    'title' => $booking->full_name . ' - ' . ucfirst($booking->service),
+                    'title' => $booking->full_name . ' - ' . ($booking->service->title ?? '-'),
                     'start' => $booking->booking_date,
                     'color' => $booking->payment_status == 'paid' ? '#16a34a' : '#f59e0b',
                 ];
@@ -136,4 +134,3 @@
     });
 </script>
 @endpush
-        <div id="calendar"></div>

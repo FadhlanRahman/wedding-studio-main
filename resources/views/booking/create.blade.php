@@ -60,15 +60,17 @@
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
                     </div>
 
-                    <!-- Paket Layanan -->
+                    <!-- Paket Layanan (ambil dari database) -->
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
-                        <select name="service" id="service_package" required
+                        <select name="service_id" id="service_package" required
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                             <option value="">-- Pilih Paket --</option>
-                            <option value="prewedding" data-price="3000000">Paket Prewedding - Rp 3.000.000</option>
-                            <option value="wedding" data-price="7000000">Paket Wedding - Rp 7.000.000</option>
-                            <option value="premium" data-price="12000000">Paket Premium - Rp 12.000.000</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" data-price="{{ $service->price }}">
+                                    {{ $service->title }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
