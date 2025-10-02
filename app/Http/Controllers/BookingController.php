@@ -1,146 +1,143 @@
-<?php
+@extends('layouts.admin')
 
-namespace App\Http\Controllers;
+@section('content')
+<div class="min-h-screen bg-gray-50 p-6">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-3">
+        📋 Daftar Booking
+    </h1>
 
-use App\Models\Booking;
-use App\Models\Service; // ✅ tambahkan
-use Illuminate\Http\Request;
+    <!-- Tabel Booking -->
+    <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
+        <table class="w-full text-sm">
+            <thead class="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                <tr>
+                    <th class="p-3 text-left">#</th>
+                    <th class="p-3 text-left">Nama Klien</th>
+                    <th class="p-3 text-left">Tanggal Booking</th>
+                    <th class="p-3 text-left">Layanan</th>
+                    <th class="p-3 text-left">Harga</th>
+                    <th class="p-3 text-left">Metode Bayar</th>
+                    <th class="p-3 text-left">Status</th>
+                    <th class="p-3 text-left">Bukti Bayar</th>
+                    <th class="p-3 text-left">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @forelse($bookings as $booking)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-3">
+                        {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
+                    </td>
 
-class BookingController extends Controller
-{
-    /**
-     * Halaman form booking untuk user
-     */
-    public function create()
-    {
-        $services = Service::all(); // ✅ ambil semua services
-        return view('booking.create', compact('services'));
-    }
+                    <td class="p-3 font-medium text-gray-700">{{ $booking->full_name }}</td>
+                    <td class="p-3 text-gray-600">
+                        {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}
+                    </td>
 
-    /**
-     * Simpan booking baru dari user
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'birth_place'    => 'required|string|max:255',
-            'birth_date'     => 'required|date',
-            'booking_date'   => 'required|date|unique:bookings,booking_date',
-            'phone'          => 'required|string|max:15',
-            'service_id'     => 'required|exists:services,id', // ✅ ganti ke service_id
-            'payment_method' => 'nullable|string',
-            'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+                    <!-- Relasi Service -->
+                    <td class="p-3">{{ $booking->service->title ?? '-' }}</td>
+                    <td class="p-3 font-semibold text-blue-700">
+                        Rp {{ number_format($booking->service->price ?? $booking->total_price ?? 0, 0, ',', '.') }}
+                    </td>
 
-        $service = Service::findOrFail($request->service_id);
+                    <td class="p-3">{{ $booking->payment_method ?? '-' }}</td>
 
-        $data = $request->except(['payment_proof']);
-        $data['total_price'] = $service->price; // ✅ harga otomatis dari service
+                    <!-- Kolom Status + Approval -->
+                    <td class="p-3">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                            {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' :
+                               ($booking->payment_status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                            {{ ucfirst($booking->payment_status) }}
+                        </span>
 
-        // Upload foto bukti pembayaran
-        if ($request->hasFile('payment_proof')) {
-            $filename = time().'_'.$request->file('payment_proof')->getClientOriginalName();
-            $request->file('payment_proof')->move(public_path('uploads/payments'), $filename);
-            $data['payment_proof'] = $filename;
+                        <form action="{{ route('admin.bookings.update', $booking->id) }}" method="POST" class="mt-2">
+                            @csrf
+                            @method('PUT')
+                            <select name="payment_status" onchange="this.form.submit()"
+                                class="w-full border-gray-300 rounded-lg text-sm p-2 focus:ring-2 focus:ring-blue-400">
+                                <option disabled>-- Approval --</option>
+                                <option value="pending" {{ $booking->payment_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="paid" {{ $booking->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
+                            </select>
+                        </form>
+                    </td>
+
+                    <!-- Bukti Bayar -->
+                    <td class="p-3">
+                        @if($booking->payment_proof)
+                            <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
+                                <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}"
+                                     alt="Bukti"
+                                     class="w-24 h-24 object-cover rounded-lg shadow-md transform hover:scale-105 transition">
+                            </a>
+                        @else
+                            <span class="text-red-500 italic">Belum upload</span>
+                        @endif
+                    </td>
+
+                    <!-- Tombol Edit & Hapus -->
+                    <td class="p-3 flex gap-2">
+                        <a href="{{ route('admin.bookings.edit', $booking->id) }}"
+                           class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition">
+                            ✏️ Edit
+                        </a>
+                        <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST"
+                              onsubmit="return confirm('Yakin ingin menghapus booking ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+                                🗑️ Hapus
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="9" class="p-6 text-center text-gray-500 italic">Belum ada booking.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-6">
+        {{ $bookings->links() }}
+    </div>
+
+    <!-- Kalender -->
+    <div class="mt-10 bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">📆 Kalender Booking</h2>
+        <div id="calendar"></div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<!-- FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek'
+        },
+        events: @json($events),
+        eventClick: function(info) {
+            // contoh: munculkan nama dan tanggal
+            alert("Booking oleh: " + info.event.title + "\nTanggal: " + info.event.start.toLocaleDateString());
         }
+    });
 
-        // Default status
-        $data['payment_status'] = isset($data['payment_proof']) ? 'pending' : 'unpaid';
-
-        Booking::create($data);
-
-        return redirect()->route('booking.create')
-            ->with('success', 'Booking berhasil dibuat! Tunggu verifikasi pembayaran.');
-    }
-
-    /**
-     * List semua booking untuk admin
-     */
-    public function index()
-    {
-        $bookings = Booking::latest()->paginate(10);
-        return view('admin.bookings.calender', compact('bookings'));
-    }
-
-    /**
-     * Kalender booking untuk admin
-     */
-    public function calendar()
-    {
-        $bookings = Booking::all();
-        return view('admin.calendar', compact('bookings'));
-    }
-
-    /**
-     * Form edit booking (admin)
-     */
-    public function edit(Booking $booking)
-    {
-        $services = Service::all(); // ✅ supaya bisa pilih ulang service saat edit
-        return view('admin.bookings.edit', compact('booking', 'services'));
-    }
-
-    /**
-     * Update booking (admin)
-     */
-    public function update(Request $request, Booking $booking)
-    {
-        $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'birth_place'    => 'nullable|string|max:255',
-            'birth_date'     => 'nullable|date',
-            'booking_date'   => 'required|date|unique:bookings,booking_date,' . $booking->id,
-            'phone'          => 'nullable|string|max:20',
-            'service_id'     => 'required|exists:services,id', // ✅ ganti ke service_id
-            'payment_method' => 'nullable|string',
-            'payment_status' => 'in:unpaid,pending,paid',
-            'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        $service = Service::findOrFail($request->service_id);
-
-        $data = $request->except(['payment_proof']);
-        $data['total_price'] = $service->price; // ✅ update harga sesuai service
-
-        if ($request->hasFile('payment_proof')) {
-            $filename = time().'_'.$request->file('payment_proof')->getClientOriginalName();
-            $request->file('payment_proof')->move(public_path('uploads/payments'), $filename);
-            $data['payment_proof'] = $filename;
-        }
-
-        $booking->update($data);
-
-        return redirect()->route('admin.calendar')
-            ->with('success', 'Booking berhasil diperbarui.');
-    }
-
-    /**
-     * Hapus booking (admin)
-     */
-    public function destroy(Booking $booking)
-    {
-        $booking->delete();
-        return redirect()->route('admin.calendar')
-            ->with('success', 'Booking berhasil dihapus.');
-    }
-
-    /**
-     * API untuk FullCalendar
-     */
-    public function events()
-    {
-        $bookings = Booking::all();
-
-        $events = $bookings->map(function ($booking) {
-            return [
-                'id'    => $booking->id,
-                'title' => $booking->full_name . ' - ' . ucfirst($booking->service->name ?? '-'),
-                'start' => $booking->booking_date,
-                'color' => $booking->payment_status === 'paid' ? 'green' : 'red'
-            ];
-        });
-
-        return response()->json($events);
-    }
-}
+    calendar.render();
+});
+</script>
+@endpush

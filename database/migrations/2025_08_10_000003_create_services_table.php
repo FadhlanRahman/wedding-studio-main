@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description'); // ✅ konsisten dengan Model & Controller
-            $table->decimal('price', 12, 2); // ✅ lebih baik pakai decimal utk harga
+            $table->text('description'); 
+            $table->decimal('price', 12, 2); 
             $table->string('icon')->nullable();
             $table->timestamps();
         });

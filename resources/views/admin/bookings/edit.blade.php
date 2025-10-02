@@ -10,7 +10,6 @@
             <h1 class="text-2xl font-bold mb-6">Edit Booking</h1>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
                 <!-- Nama Lengkap -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Nama Lengkap</label>
@@ -46,22 +45,26 @@
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
                 </div>
 
-                <!-- Paket Layanan -->
+                <!-- Paket Layanan (sync dengan DB) -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
-                    <select name="service" id="service_package" required
+                    <select name="service_id" id="service_package" required
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                         <option value="">-- Pilih Paket --</option>
-                        <option value="prewedding" data-price="3000000" {{ $booking->service=='prewedding' ? 'selected' : '' }}>Paket Prewedding - Rp 3.000.000</option>
-                        <option value="wedding" data-price="7000000" {{ $booking->service=='wedding' ? 'selected' : '' }}>Paket Wedding - Rp 7.000.000</option>
-                        <option value="premium" data-price="12000000" {{ $booking->service=='premium' ? 'selected' : '' }}>Paket Premium - Rp 12.000.000</option>
+                        @foreach($services as $service)
+                            <option value="{{ $service->id }}" data-price="{{ $service->price }}"
+                                {{ $booking->service_id == $service->id ? 'selected' : '' }}>
+                                {{ $service->title }} - Rp {{ number_format($service->price, 0, ',', '.') }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
                 <!-- Total Biaya -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Total Biaya</label>
-                    <input type="text" name="total_price" id="total_price" value="{{ old('total_price', $booking->total_price) }}" readonly
+                    <input type="text" name="total_price" id="total_price" 
+                        value="Rp {{ number_format($booking->total_price, 0, ',', '.') }}" readonly
                         class="w-full px-4 py-2 border rounded-lg bg-gray-100">
                 </div>
 
@@ -81,10 +84,13 @@
                     <label class="block font-medium text-gray-700 mb-1">Status Pembayaran</label>
                     <select name="payment_status" required
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        <option value="pending" {{ $booking->payment_status=='pending' ? 'selected' : '' }}>Belum Bayar</option>
+                        <option value="unpaid" {{ $booking->payment_status=='unpaid' ? 'selected' : '' }}>Belum Bayar</option>
+                        <option value="pending" {{ $booking->payment_status=='pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
                         <option value="paid" {{ $booking->payment_status=='paid' ? 'selected' : '' }}>Lunas</option>
                     </select>
                 </div>
+            </div>
+
             <div class="mt-6 text-center">
                 <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
                     Update Booking

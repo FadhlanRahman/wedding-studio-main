@@ -33,7 +33,7 @@
                         {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}
                     </td>
 
-                    <!-- ✅ Ganti dengan relasi service -->
+                    <!-- ✅ Relasi Service -->
                     <td class="p-3">{{ $booking->service->title ?? '-' }}</td>
                     <td class="p-3 font-semibold text-blue-700">
                         Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}
@@ -105,13 +105,6 @@
     <div class="mt-6">
         {{ $bookings->links() }}
     </div>
-
-    <!-- Kalender -->
-    <div class="mt-10 bg-white rounded-2xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">📆 Kalender Booking</h2>
-        <div id="calendar"></div>
-    </div>
-</div>
 @endsection
 
 @push('scripts')

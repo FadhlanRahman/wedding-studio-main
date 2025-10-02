@@ -65,14 +65,15 @@
                         <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
                         <select name="service_id" id="service_package" required
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                            <option value="">-- Pilih Paket --</option>
+                            <option value="">-- Pilih Layanan --</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}" data-price="{{ $service->price }}">
-                                    {{ $service->title }}
+                                    {{ $service->title }} - Rp {{ number_format($service->price, 0, ',', '.') }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
+
 
                     <!-- Total Biaya -->
                     <div>
