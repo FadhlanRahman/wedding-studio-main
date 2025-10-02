@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Team; // tambahkan model Team
+use App\Models\Team; // ✅ Import model Team
 
 class AboutController extends Controller
 {
@@ -12,7 +12,7 @@ class AboutController extends Controller
         // Ambil semua data tim dari database
         $teams = Team::all();
 
-        // lempar ke view about/index.blade.php
-        return view('about.index', compact('teams'));
+        // Lempar data ke view about.blade.php
+        return view('about', compact('teams'));
     }
 }
