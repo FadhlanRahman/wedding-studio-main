@@ -6,7 +6,7 @@
         📋 Daftar Booking
     </h1>
 
-    <!-- Tabel Booking -->
+    <!-- 📌 Tabel Booking -->
     <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
         <table class="w-full text-sm">
             <thead class="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
@@ -24,78 +24,98 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
                 @forelse($bookings as $booking)
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="p-3">
-                        {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
-                    </td>
-                    <td class="p-3 font-medium text-gray-700">{{ $booking->full_name }}</td>
-                    <td class="p-3 text-gray-600">
-                        {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}
-                    </td>
+                    <tr class="hover:bg-gray-50 transition">
+                        <!-- Nomor Urut -->
+                        <td class="p-3">
+                            {{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}
+                        </td>
 
-                    <!-- ✅ Relasi Service -->
-                    <td class="p-3">{{ $booking->service->title ?? '-' }}</td>
-                    <td class="p-3 font-semibold text-blue-700">
-                        Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}
-                    </td>
+                        <!-- Nama -->
+                        <td class="p-3 font-medium text-gray-700">
+                            {{ $booking->full_name }}
+                        </td>
 
-                    <td class="p-3">{{ $booking->payment_method ?? '-' }}</td>
+                        <!-- Tanggal -->
+                        <td class="p-3 text-gray-600">
+                            {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}
+                        </td>
 
-                    <!-- Kolom Status + Approval -->
-                    <td class="p-3">
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold
-                            {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 
-                               ($booking->payment_status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
-                            {{ ucfirst($booking->payment_status) }}
-                        </span>
+                        <!-- Layanan -->
+                        <td class="p-3">
+                            {{ $booking->service->title ?? '-' }}
+                        </td>
 
-                        <!-- Tombol Approval -->
-                        <form action="{{ route('admin.bookings.update', $booking->id) }}" method="POST" class="mt-2">
-                            @csrf
-                            @method('PUT')
-                            <select name="payment_status" onchange="this.form.submit()" 
-                                class="w-full border-gray-300 rounded-lg text-sm p-2 focus:ring-2 focus:ring-blue-400">
-                                <option disabled selected>-- Approval --</option>
-                                <option value="pending" {{ $booking->payment_status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="paid" {{ $booking->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
-                            </select>
-                        </form>
-                    </td>
+                        <!-- Harga -->
+                        <td class="p-3 font-semibold text-blue-700">
+                            Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}
+                        </td>
 
-                    <!-- Bukti Bayar -->
-                    <td class="p-3">
-                        @if($booking->payment_proof)
-                            <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
-                                <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
-                                     alt="Bukti" 
-                                     class="w-24 h-24 object-cover rounded-lg shadow-md transform hover:scale-105 transition">
+                        <!-- Metode Bayar -->
+                        <td class="p-3">
+                            {{ $booking->payment_method ?? '-' }}
+                        </td>
+
+                        <!-- Status + Approval -->
+                        <td class="p-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 
+                                   ($booking->payment_status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                                {{ ucfirst($booking->payment_status) }}
+                            </span>
+
+                            <!-- Dropdown Approval -->
+                            <form action="{{ route('admin.bookings.update', $booking->id) }}" method="POST" class="mt-2">
+                                @csrf
+                                @method('PUT')
+                                <select name="payment_status" onchange="this.form.submit()" 
+                                    class="w-full border-gray-300 rounded-lg text-sm p-2 focus:ring-2 focus:ring-blue-400">
+                                    <option disabled selected>-- Approval --</option>
+                                    <option value="pending" {{ $booking->payment_status == 'pending' ? 'selected' : '' }}>
+                                        Pending
+                                    </option>
+                                    <option value="paid" {{ $booking->payment_status == 'paid' ? 'selected' : '' }}>
+                                        Lunas
+                                    </option>
+                                </select>
+                            </form>
+                        </td>
+
+                        <!-- Bukti Bayar -->
+                        <td class="p-3">
+                            @if($booking->payment_proof)
+                                <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
+                                    <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
+                                         alt="Bukti" 
+                                         class="w-24 h-24 object-cover rounded-lg shadow-md transform hover:scale-105 transition">
+                                </a>
+                            @else
+                                <span class="text-red-500 italic">Belum upload</span>
+                            @endif
+                        </td>
+
+                        <!-- Tombol Edit & Hapus -->
+                        <td class="p-3 flex gap-2">
+                            <a href="{{ route('admin.bookings.edit', $booking->id) }}" 
+                               class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition">
+                                ✏️ Edit
                             </a>
-                        @else
-                            <span class="text-red-500 italic">Belum upload</span>
-                        @endif
-                    </td>
-
-                    <!-- Tombol Edit & Hapus -->
-                    <td class="p-3 flex gap-2">
-                        <a href="{{ route('admin.bookings.edit', $booking->id) }}" 
-                           class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition">
-                            ✏️ Edit
-                        </a>
-                        <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST" 
-                              onsubmit="return confirm('Yakin ingin menghapus booking ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                    class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
-                                🗑️ Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+                            <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST" 
+                                  onsubmit="return confirm('Yakin ingin menghapus booking ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+                                    🗑️ Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="9" class="p-6 text-center text-gray-500 italic">Belum ada booking.</td>
-                </tr>
+                    <tr>
+                        <td colspan="9" class="p-6 text-center text-gray-500 italic">
+                            Belum ada booking.
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
@@ -105,6 +125,7 @@
     <div class="mt-6">
         {{ $bookings->links() }}
     </div>
+</div>
 @endsection
 
 @push('scripts')
