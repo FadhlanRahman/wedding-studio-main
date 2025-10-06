@@ -7,8 +7,7 @@ use App\Http\Controllers\PortofolioController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\TestimonialController; // ✅ user
-
+use App\Http\Controllers\TestimonialController;
 
 // ====================
 // HALAMAN UMUM (TANPA LOGIN)
@@ -16,13 +15,18 @@ use App\Http\Controllers\TestimonialController; // ✅ user
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/services', [HomeController::class, 'services'])->name('services');
-
-// ✅ Routing contact untuk user
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
+
+// ✅ User bisa langsung akses form booking (tanpa login)
+Route::get('/booking', [BookingController::class, 'create'])->name('booking.create');
+Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
 
 // ✅ User submit testimonial (form kirim testimoni)
 Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
 
+// ====================
+// AUTENTIKASI
+// ====================
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -34,12 +38,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ====================
 Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/portofolio', [PortofolioController::class, 'index'])->name('portofolio');
-
-    // Booking user
-    Route::prefix('booking')->name('booking.')->group(function () {
-        Route::get('/', [BookingController::class, 'create'])->name('create');
-        Route::post('/store', [BookingController::class, 'store'])->name('store');
-    });
 });
 
 // ====================
@@ -73,11 +71,11 @@ Route::middleware(['auth', 'admin'])
             Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
             Route::delete('/delete', [AdminController::class, 'contactDestroy'])->name('destroy');
 
-        // ✅ Testimoni CRUD (admin kelola testimoni user)
-        Route::prefix('testimonial')->name('testimonial.')->group(function () {
-            Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
-            Route::post('/{id}/publish', [AdminController::class, 'publish'])->name('publish');
-            Route::post('/{id}/unpublish', [AdminController::class, 'unpublish'])->name('unpublish');
+            // ✅ Testimoni CRUD (admin kelola testimoni user)
+            Route::prefix('testimonial')->name('testimonial.')->group(function () {
+                Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
+                Route::post('/{id}/publish', [AdminController::class, 'publish'])->name('publish');
+                Route::post('/{id}/unpublish', [AdminController::class, 'unpublish'])->name('unpublish');
             });
         });
 
