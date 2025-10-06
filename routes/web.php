@@ -73,11 +73,11 @@ Route::middleware(['auth', 'admin'])
             Route::put('/update', [AdminController::class, 'contactUpdate'])->name('update');
             Route::delete('/delete', [AdminController::class, 'contactDestroy'])->name('destroy');
 
-            // ✅ Testimoni CRUD (admin kelola testimoni user)
-            Route::prefix('testimonial')->name('testimonial.')->group(function () {
-                Route::delete('/{id}', [AdminController::class, 'destroy'])->name('destroy');
-                Route::post('/{id}/publish', [AdminController::class, 'publish'])->name('publish');
-                Route::post('/{id}/unpublish', [AdminController::class, 'unpublish'])->name('unpublish');
+        // ✅ Testimoni CRUD (admin kelola testimoni user)
+        Route::prefix('testimonial')->name('testimonial.')->group(function () {
+            Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
+            Route::post('/{id}/publish', [AdminController::class, 'publish'])->name('publish');
+            Route::post('/{id}/unpublish', [AdminController::class, 'unpublish'])->name('unpublish');
             });
         });
 

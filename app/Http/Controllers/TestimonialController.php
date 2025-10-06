@@ -20,4 +20,13 @@ class TestimonialController extends Controller
 
         return redirect()->back()->with('success', 'Terima kasih, testimoni Anda sudah dikirim!');
     }
+
+    // ✅ Tambahkan ini untuk hapus testimoni dari admin
+    public function destroy($id)
+    {
+        $testimonial = Testimonial::findOrFail($id);
+        $testimonial->delete();
+
+        return redirect()->back()->with('success', 'Testimoni berhasil dihapus!');
+    }
 }

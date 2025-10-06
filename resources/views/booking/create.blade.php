@@ -60,7 +60,7 @@
                             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
                     </div>
 
-                    <!-- Paket Layanan (ambil dari database) -->
+                    <!-- Paket Layanan -->
                     <div>
                         <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
                         <select name="service_id" id="service_package" required
@@ -73,7 +73,6 @@
                             @endforeach
                         </select>
                     </div>
-
 
                     <!-- Total Biaya -->
                     <div>
@@ -146,33 +145,26 @@
     </div>
 </div>
 
-<!-- Flatpickr CSS & JS -->
+<!-- Flatpickr & SweetAlert -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     const bookedDates = @json($bookedDates ?? []);
 
-    // Step Navigation
+    // === STEP NAVIGATION ===
     document.getElementById("nextBtn").addEventListener("click", function() {
         document.getElementById("step1").classList.add("hidden");
         document.getElementById("step2").classList.remove("hidden");
     });
-
     document.getElementById("prevBtn").addEventListener("click", function() {
         document.getElementById("step2").classList.add("hidden");
         document.getElementById("step1").classList.remove("hidden");
     });
 
-    // Kalender Tanggal Lahir
-    flatpickr("#birth_date", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d F Y",
-        allowInput: true
-    });
-
-    // Kalender Tanggal Booking
+    // === FLATPICKR ===
+    flatpickr("#birth_date", { dateFormat: "Y-m-d", altInput: true, altFormat: "d F Y", allowInput: true });
     flatpickr("#booking_date", {
         dateFormat: "Y-m-d",
         altInput: true,
@@ -189,22 +181,49 @@
         }
     });
 
-    // Update harga otomatis
+    // === UPDATE HARGA ===
     document.getElementById('service_package').addEventListener('change', updatePaymentAmount);
     document.getElementById('dp_option').addEventListener('change', updatePaymentAmount);
-
     function updatePaymentAmount() {
         let packageSelect = document.getElementById('service_package');
         let dpOption = document.getElementById('dp_option').value;
         let price = packageSelect.options[packageSelect.selectedIndex]?.getAttribute('data-price');
-
         if(price){
             let totalPrice = parseInt(price);
             document.getElementById('total_price').value = totalPrice;
-
             let amountPaid = dpOption === "dp" ? totalPrice / 2 : totalPrice;
             document.getElementById('amount_paid').value = `Rp ${amountPaid.toLocaleString()}`;
         }
     }
+
+    // === SWEETALERT KONFIRMASI SEBELUM SUBMIT ===
+    const bookingForm = document.querySelector('form');
+    bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Konfirmasi Booking',
+            text: 'Apakah data yang kamu masukkan sudah benar?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, kirim booking!',
+            cancelButtonText: 'Periksa lagi',
+            confirmButtonColor: '#2563eb',
+            cancelButtonColor: '#6b7280'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                bookingForm.submit();
+            }
+        });
+    });
+
+    // === SWEETALERT BERHASIL ===
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Booking Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#2563eb'
+        });
+    @endif
 </script>
 @endsection
