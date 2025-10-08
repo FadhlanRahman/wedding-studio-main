@@ -16,9 +16,9 @@
             {{-- Menu Utama (Desktop) --}}
             <div class="hidden md:flex space-x-8 items-center justify-center">
                 <a href="{{ route('home') }}" class="text-white hover:text-yellow-200 transition font-medium">Home</a>
-<a href="{{ route('about') }}" class="text-white hover:text-yellow-200 transition font-medium">About</a>
-<a href="{{ route('services') }}" class="text-white hover:text-yellow-200 transition font-medium">Services</a>
-<a href="{{ route('contact') }}" class="text-white hover:text-yellow-200 transition font-medium">Contact</a>
+                <a href="{{ route('about') }}" class="text-white hover:text-yellow-200 transition font-medium">About</a>
+                <a href="{{ route('services') }}" class="text-white hover:text-yellow-200 transition font-medium">Services</a>
+                <a href="{{ route('contact') }}" class="text-white hover:text-yellow-200 transition font-medium">Contact</a>
 
             </div>
 
