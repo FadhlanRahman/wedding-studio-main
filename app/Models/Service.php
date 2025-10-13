@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-    protected $fillable = ['title', 'description', 'price', 'icon'];
+    protected $fillable = ['title', 'description', 'price', 'icon', 'pdf_path'];
 
     public function bookings()
     {

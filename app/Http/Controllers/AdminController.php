@@ -155,33 +155,66 @@ class AdminController extends Controller
             'description' => 'required|string',
             'price'       => 'required|numeric',
             'icon'        => 'nullable|string',
+            'pdf_file'    => 'nullable|mimes:pdf|max:5120', // ✅ ubah sesuai name input
         ]);
 
-        Service::create($request->only(['title', 'description', 'price', 'icon']));
+        $pdfPath = null;
+
+        // ✅ Perbaikan: simpan file PDF dengan benar
+        if ($request->hasFile('pdf_file')) {
+            $pdfPath = $request->file('pdf_file')->store('services/pdf', 'public');
+        }
+
+        // ✅ Simpan data ke database
+        Service::create([
+            'title'       => $request->title,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'icon'        => $request->icon,
+            'pdf_path'    => $pdfPath,
+        ]);
 
         return redirect()->route('admin.services.index')
-                         ->with('success', 'Service berhasil ditambahkan!');
+                        ->with('success', 'Service berhasil ditambahkan!');
     }
+
+
+
 
     public function servicesEdit(Service $service)
     {
         return view('admin.services.edit', compact('service'));
     }
 
-    public function servicesUpdate(Request $request, Service $service)
-    {
-        $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'required|string',
-            'price'       => 'required|numeric',
-            'icon'        => 'nullable|string',
-        ]);
+public function servicesUpdate(Request $request, Service $service)
+{
+    $request->validate([
+        'title'       => 'required|string|max:255',
+        'description' => 'required|string',
+        'price'       => 'required|numeric',
+        'icon'        => 'nullable|string',
+        'pdf_file'    => 'nullable|mimes:pdf|max:5120',
+    ]);
 
-        $service->update($request->only(['title', 'description', 'price', 'icon']));
+    $pdfPath = $service->pdf_path;
 
-        return redirect()->route('admin.services.index')
-                         ->with('success', 'Service berhasil diperbarui!');
+    if ($request->hasFile('pdf_file')) {
+        $pdfPath = $request->file('pdf_file')->store('services/pdf', 'public');
     }
+
+    $service->update([
+        'title'       => $request->title,
+        'description' => $request->description,
+        'price'       => $request->price,
+        'icon'        => $request->icon,
+        'pdf_path'    => $pdfPath,
+    ]);
+
+    return redirect()->route('admin.services.index')
+                     ->with('success', 'Service berhasil diperbarui!');
+}
+
+
 
     public function servicesDestroy(Service $service)
     {

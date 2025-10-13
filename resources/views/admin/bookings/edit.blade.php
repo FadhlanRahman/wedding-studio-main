@@ -3,7 +3,10 @@
 @section('content')
 <div class="bg-gradient-to-b from-blue-50 to-white py-12 min-h-screen">
     <div class="container mx-auto px-4">
-        <form action="{{ route('admin.bookings.update', $booking->id) }}" method="POST" class="bg-white p-8 rounded-xl shadow-lg">
+        <form action="{{ route('admin.bookings.update', $booking->id) }}" 
+              method="POST" 
+              enctype="multipart/form-data" 
+              class="bg-white p-8 rounded-xl shadow-lg">
             @csrf
             @method('PUT')
 
@@ -34,18 +37,20 @@
                 <!-- Tanggal Lahir -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Tanggal Lahir</label>
-                    <input type="text" id="birth_date" name="birth_date" value="{{ old('birth_date', $booking->birth_date) }}" required
+                    <input type="text" id="birth_date" name="birth_date" 
+                        value="{{ old('birth_date', $booking->birth_date) }}" required
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
                 </div>
 
                 <!-- Tanggal Booking -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Tanggal Booking</label>
-                    <input type="text" id="booking_date" name="booking_date" value="{{ old('booking_date', $booking->booking_date) }}" required
+                    <input type="text" id="booking_date" name="booking_date" 
+                        value="{{ old('booking_date', $booking->booking_date) }}" required
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
                 </div>
 
-                <!-- Paket Layanan (sync dengan DB) -->
+                <!-- Paket Layanan -->
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
                     <select name="service_id" id="service_package" required
@@ -89,6 +94,30 @@
                         <option value="paid" {{ $booking->payment_status=='paid' ? 'selected' : '' }}>Lunas</option>
                     </select>
                 </div>
+
+                <!-- Bukti Pembayaran -->
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-gray-700 mb-1">Bukti Pembayaran</label>
+
+                    @if($booking->payment_proof)
+                        <div class="mb-3">
+                            <p class="text-sm text-gray-500 mb-1">Bukti pembayaran saat ini:</p>
+                            <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
+                                <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
+                                     alt="Bukti Pembayaran" 
+                                     class="w-48 h-48 object-cover rounded-lg shadow-md border transform hover:scale-105 transition">
+                            </a>
+                        </div>
+                    @else
+                        <p class="text-sm text-red-500 italic mb-2">Belum ada bukti pembayaran.</p>
+                    @endif
+
+                    <!-- Preview gambar baru -->
+                    <div id="preview-container" class="mt-3 hidden">
+                        <p class="text-sm text-gray-600 mb-1">Preview gambar baru:</p>
+                        <img id="preview-image" class="w-48 h-48 object-cover rounded-lg shadow-md border">
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 text-center">
@@ -104,6 +133,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    // --- Flatpickr setup ---
     let bookedDates = @json(\App\Models\Booking::pluck('booking_date')->toArray());
     let currentBooking = "{{ $booking->booking_date }}";
 
@@ -123,10 +153,23 @@
         allowInput: true
     });
 
-    // Update harga otomatis
+    // --- Update harga otomatis ---
     document.getElementById('service_package').addEventListener('change', function () {
         let price = this.options[this.selectedIndex].getAttribute('data-price');
         document.getElementById('total_price').value = price ? `Rp ${parseInt(price).toLocaleString()}` : '';
+    });
+
+    // --- Preview gambar baru ---
+    document.getElementById('payment_proof').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('preview-image').src = e.target.result;
+                document.getElementById('preview-container').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
     });
 </script>
 @endsection

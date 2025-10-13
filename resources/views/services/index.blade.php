@@ -23,6 +23,7 @@
     <div class="max-w-6xl mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-6 justify-items-center">
       @foreach ($services as $service)
         <article class="service-card group relative w-full max-w-sm rounded-2xl p-7 fade-in-up overflow-hidden">
+          {{-- Price Badge --}}
           <div class="price-badge">
             <span>Rp {{ number_format($service->price, 0, ',', '.') }}</span>
           </div>
@@ -31,14 +32,30 @@
             <div class="icon-bubble">
               <span class="text-4xl">{{ $service->icon }}</span>
             </div>
+
             <h3 class="mt-4 text-xl font-bold text-slate-800">{{ $service->title }}</h3>
             <p class="mt-2 text-slate-600 text-sm">{{ $service->description }}</p>
+
+            {{-- 🔽 Tombol Deskripsi Paket --}}
+            <div class="mt-4">
+              @if ($service->pdf_path)
+                <a href="{{ asset('storage/' . $service->pdf_path) }}" target="_blank"
+                   class="inline-block bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-all shadow-md">
+                   📄 Deskripsi Paket
+                </a>
+              @else
+                <button disabled
+                  class="inline-block bg-gray-400 text-white text-sm font-semibold px-4 py-2 rounded-full cursor-not-allowed opacity-80">
+                  Deskripsi Tidak Tersedia
+                </button>
+              @endif
+            </div>
           </div>
         </article>
       @endforeach
     </div>
 
-    {{-- CTA --}}
+    {{-- CTA di bawah semua card --}}
     <div class="text-center mt-16 fade-in-up">
       <a href="{{ route('booking.create') }}"
          class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white font-semibold px-10 py-4 rounded-full shadow-lg transition-all text-lg">
@@ -106,22 +123,6 @@
     border-radius: .5rem;
     font-size: .85rem;
     box-shadow: 0 8px 20px rgba(37,99,235,.35);
-  }
-
-  /* Buttons */
-  .btn-primary {
-    background-color: #1976d2;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
-  }
-  .btn-primary:hover {
-    background-color: #0d47a1;
-    box-shadow: 0 0 15px rgba(33, 150, 243, 0.7);
   }
 
   /* Fade-in animation */
