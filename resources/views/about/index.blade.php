@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="relative bg-cover bg-center min-h-full" style="background-image: url('{{ asset('background/background.jpg') }}')">
+<section 
+    class="relative bg-cover bg-center bg-no-repeat min-h-screen" 
+    style="
+        background-image: url('{{ asset('background/BlueTheme.jpeg') }}');
+        background-attachment: fixed;
+        background-size: cover;
+    "
+>
     {{-- Overlay hitam transparan --}}
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
     {{-- Konten utama --}}
     <div class="relative z-10 flex items-center justify-center py-10 min-h-screen px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl bg-white bg-opacity-95 animate-fadeIn">

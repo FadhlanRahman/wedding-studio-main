@@ -5,7 +5,7 @@
 
             {{-- Logo + Nama Studio --}}
             <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                <img src="{{ asset('logo/logo.png') }}" 
+                <img src="{{ asset('logo/LogoTransp.png') }}" 
                      alt="Ellen Wedding Studio" 
                      class="h-14 w-auto object-contain">
                 <span class="text-white font-extrabold text-2xl tracking-wider">
