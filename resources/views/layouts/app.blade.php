@@ -7,9 +7,11 @@
     <title>Wedding Studio</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twentytwenty/0.9.1/css/twentytwenty.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twentytwenty/0.9.1/css/twentytwenty.css" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100">
+<body class="bg-[var(--color-primary-bg)] text-[var(--color-text-light)] font-sans antialiased selection:bg-[var(--color-gold)] selection:text-white">
 
     {{-- Navbar hanya muncul di halaman umum --}}
     @if (!Request::is('login') && !Request::is('register') && !Request::is('admin*'))
