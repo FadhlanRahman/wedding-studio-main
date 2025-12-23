@@ -1,146 +1,148 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="bg-[var(--color-primary-bg)] text-[var(--color-text-light)] overflow-hidden">
 
-<section class="relative min-h-screen py-20 bg-[var(--color-primary-bg)]">
-   {{-- Background Accents --}}
-   <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--color-gold)]/10 rounded-full blur-[100px] pointer-events-none"></div>
-   <div class="absolute bottom-0 left-0 w-64 h-64 bg-[var(--color-secondary-bg)] rounded-full blur-[80px] pointer-events-none"></div>
+     {{-- ============== HERO SECTION ============== --}}
+     <section class="relative h-[50vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+             <img src="{{ asset('background/background.jpeg') }}" class="w-full h-full object-cover opacity-30">
+             <div class="absolute inset-0 bg-gradient-to-b from-[var(--color-primary-bg)]/80 to-[var(--color-primary-bg)]"></div>
+        </div>
+        <div class="relative z-10 text-center px-6" data-aos="fade-up">
+            <span class="text-[var(--color-gold)] font-serif italic text-xl tracking-widest mb-4 block">Exclusive Offerings</span>
+            <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-6">Our Services</h1>
+             <div class="w-24 h-1 bg-[var(--color-gold)] mx-auto rounded-full"></div>
+        </div>
+    </section>
 
-  <div class="relative z-10 container mx-auto px-6">
-    {{-- Header --}}
-    <header class="text-center mb-16 fade-in-up">
-      <span class="text-[var(--color-gold)] font-serif italic text-xl">Exclusive Offerings</span>
-      <h1 class="mt-2 text-4xl md:text-5xl font-serif font-bold text-white">
-        Our Wedding Services
-      </h1>
-      <div class="w-24 h-1 bg-[var(--color-gold)] mx-auto mt-6 rounded-full"></div>
-      <p class="mt-6 text-[var(--color-text-muted)] max-w-2xl mx-auto text-lg font-light leading-relaxed">
-        Rangkaian layanan eksklusif yang dirancang untuk menyempurnakan hari istimewa Anda dengan sentuhan kemewahan dan tradisi.
-      </p>
-    </header>
+    {{-- ============== PROCESS STEPS ============== --}}
+    <section class="pb-24 relative -mt-20 z-20">
+        <div class="container mx-auto px-6">
+            <div class="bg-[var(--color-secondary-bg)] border border-[var(--color-gold)]/20 rounded-3xl p-10 shadow-2xl" data-aos="fade-up">
+                 <div class="text-center mb-12">
+                     <h2 class="text-2xl font-bold text-white uppercase tracking-widest">How It Works</h2>
+                 </div>
+                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                     {{-- Connecting Line (Desktop) --}}
+                     <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-[var(--color-gold)]/20 -z-0"></div>
 
-    {{-- Services Grid --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-      @foreach ($services as $service)
-        <article class="service-card group relative w-full rounded-2xl p-8 border border-[var(--color-gold)]/20 bg-[var(--color-primary-bg)]/50 backdrop-blur-md hover:border-[var(--color-gold)] hover:bg-[var(--color-secondary-bg)] hover:-translate-y-2 transition-all duration-500 shadow-xl">
-          {{-- Price Badge --}}
-          <div class="absolute top-0 right-0 bg-[var(--color-gold)] text-[var(--color-primary-bg)] font-bold px-4 py-2 rounded-bl-2xl rounded-tr-2xl text-sm shadow-lg">
-            Rp {{ number_format($service->price, 0, ',', '.') }}
-          </div>
+                     {{-- Step 1 --}}
+                      <div class="text-center relative z-10 group">
+                          <div class="w-24 h-24 mx-auto bg-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] rounded-full flex items-center justify-center text-3xl mb-4 group-hover:bg-[var(--color-gold)] group-hover:text-[var(--color-primary-bg)] transition duration-300 shadow-lg">☕</div>
+                          <h4 class="text-white font-bold mb-2">1. Consultation</h4>
+                          <p class="text-sm text-[var(--color-text-muted)]">Diskusi santai mengenai konsep & impian pernikahan Anda.</p>
+                      </div>
 
-          <div class="flex flex-col items-center text-center relative z-10 pt-6">
-            <div class="w-20 h-20 rounded-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/40 flex items-center justify-center mb-6 shadow-inner group-hover:scale-110 transition duration-500">
-              <span class="text-4xl filter drop-shadow-md">{{ $service->icon }}</span>
+                       {{-- Step 2 --}}
+                       <div class="text-center relative z-10 group">
+                        <div class="w-24 h-24 mx-auto bg-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] rounded-full flex items-center justify-center text-3xl mb-4 group-hover:bg-[var(--color-gold)] group-hover:text-[var(--color-primary-bg)] transition duration-300 shadow-lg">👗</div>
+                        <h4 class="text-white font-bold mb-2">2. Fitting</h4>
+                        <p class="text-sm text-[var(--color-text-muted)]">Mencoba gaun impian atau test makeup dengan MUA kami.</p>
+                    </div>
+
+                     {{-- Step 3 --}}
+                     <div class="text-center relative z-10 group">
+                        <div class="w-24 h-24 mx-auto bg-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] rounded-full flex items-center justify-center text-3xl mb-4 group-hover:bg-[var(--color-gold)] group-hover:text-[var(--color-primary-bg)] transition duration-300 shadow-lg">📅</div>
+                        <h4 class="text-white font-bold mb-2">3. Booking</h4>
+                        <p class="text-sm text-[var(--color-text-muted)]">Amankan tanggal dan finalisasi detail paket pilihan.</p>
+                    </div>
+
+                     {{-- Step 4 --}}
+                     <div class="text-center relative z-10 group">
+                        <div class="w-24 h-24 mx-auto bg-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] rounded-full flex items-center justify-center text-3xl mb-4 group-hover:bg-[var(--color-gold)] group-hover:text-[var(--color-primary-bg)] transition duration-300 shadow-lg">💍</div>
+                        <h4 class="text-white font-bold mb-2">4. Big Day</h4>
+                        <p class="text-sm text-[var(--color-text-muted)]">Nikmati momen bahagia Anda, biarkan kami yang bekerja.</p>
+                    </div>
+                 </div>
             </div>
+        </div>
+    </section>
 
-            <h3 class="text-2xl font-serif font-bold text-white mb-2 group-hover:text-[var(--color-gold)] transition">{{ $service->title }}</h3>
+    {{-- ============== SERVICES GRID ============== --}}
+    <section class="py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach ($services as $service)
+                <div class="group relative bg-[var(--color-secondary-bg)]/50 border border-[var(--color-gold)]/10 rounded-3xl overflow-hidden hover:border-[var(--color-gold)] transition duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--color-gold)]/10 flex flex-col h-full" data-aos="fade-up">
+                    
+                    {{-- Price Tag --}}
+                    <div class="absolute top-0 right-0 bg-[var(--color-gold)] text-[var(--color-primary-bg)] font-bold px-6 py-2 rounded-bl-2xl text-sm z-20">
+                        Rp {{ number_format($service->price, 0, ',', '.') }}
+                    </div>
 
-            {{-- Deskripsi dengan fitur expand --}}
-            <div class="relative w-full">
-                 <p class="service-desc mt-4 text-[var(--color-text-muted)] text-base leading-relaxed font-light px-2 line-clamp-4 transition-all duration-500 ease-in-out">
-                  {{ $service->description }}
-                </p>
+                    <div class="p-8 flex-grow">
+                         <div class="w-16 h-16 bg-[var(--color-primary-bg)] rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inset border border-[var(--color-gold)]/20 text-[var(--color-gold)]">{{ $service->icon }}</div>
+                         <h3 class="text-2xl font-serif font-bold text-white mb-4 group-hover:text-[var(--color-gold)] transition">{{ $service->title }}</h3>
+                         <p class="text-[var(--color-text-muted)] mb-6 text-sm leading-relaxed border-t border-white/5 pt-4">
+                             {{ $service->description }}
+                         </p>
+                    </div>
+                    
+                    <div class="p-8 pt-0 mt-auto">
+                        @if ($service->pdf_path)
+                            <a href="{{ asset('storage/' . $service->pdf_path) }}" target="_blank" class="block w-full text-center border border-[var(--color-gold)] text-[var(--color-gold)] px-4 py-3 rounded-xl hover:bg-[var(--color-gold)] hover:text-[var(--color-primary-bg)] transition font-bold uppercase text-xs tracking-widest flex items-center justify-center gap-2">
+                                <span>📄 View Details</span>
+                            </a>
+                        @else
+                           <button disabled class="block w-full text-center border border-gray-700 text-gray-500 px-4 py-3 rounded-xl cursor-not-allowed font-bold uppercase text-xs tracking-widest">
+                                Details Unavailable
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
             </div>
+        </div>
+    </section>
 
-            {{-- Tombol Lihat Selengkapnya --}}
-            <button class="toggle-btn mt-4 text-[var(--color-gold)] text-sm uppercase tracking-widest font-bold hover:text-white transition flex items-center gap-1 group/btn">
-              <span>Read More</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 arrow-icon transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {{-- Tombol Deskripsi Paket --}}
-            <div class="mt-8 w-full">
-              @if ($service->pdf_path)
-                <a href="{{ asset('storage/' . $service->pdf_path) }}" target="_blank" class="block w-full text-center border border-[var(--color-gold)] text-[var(--color-gold)] px-6 py-3 rounded-full hover:bg-[var(--color-gold)] hover:text-[var(--color-primary-bg)] transition font-bold uppercase text-sm tracking-wider">
-                   📄 Download PDF
-                </a>
-              @else
-                <button disabled class="block w-full text-center border border-gray-600 text-gray-500 px-6 py-3 rounded-full cursor-not-allowed font-medium text-sm tracking-wider">
-                  Unavailable
-                </button>
-              @endif
+    {{-- ============== WHY CHOOSE US (COMPARISON) ============== --}}
+    <section class="py-24 bg-[var(--color-secondary-bg)]">
+        <div class="container mx-auto px-6 max-w-5xl">
+             <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-white">Why Choose Ellen Studio?</h2>
             </div>
-          </div>
-        </article>
-      @endforeach
-    </div>
+            
+            <div class="bg-[var(--color-primary-bg)] rounded-3xl border border-[var(--color-gold)]/20 overflow-hidden shadow-2xl" data-aos="zoom-in">
+                <div class="grid grid-cols-3 text-center border-b border-[var(--color-gold)]/20 font-bold text-sm md:text-base bg-[var(--color-gold)]/5">
+                    <div class="p-6 text-[var(--color-text-muted)]">Feature</div>
+                    <div class="p-6 text-[var(--color-gold)] border-x border-[var(--color-gold)]/20">Ellen Studio</div>
+                    <div class="p-6 text-gray-500">Others</div>
+                </div>
+                
+                {{-- Row 1 --}}
+                 <div class="grid grid-cols-3 text-center border-b border-white/5 text-sm items-center">
+                    <div class="p-4 md:p-6 text-[var(--color-text-light)] font-medium text-left md:text-center">Custom Gown Design</div>
+                    <div class="p-4 md:p-6 text-[var(--color-gold)] border-x border-[var(--color-gold)]/20 bg-[var(--color-gold)]/5">Included</div>
+                    <div class="p-4 md:p-6 text-gray-500">Add-on Cost</div>
+                </div>
+                
+                 {{-- Row 2 --}}
+                 <div class="grid grid-cols-3 text-center border-b border-white/5 text-sm items-center">
+                    <div class="p-4 md:p-6 text-[var(--color-text-light)] font-medium text-left md:text-center">Makeup Retouch</div>
+                    <div class="p-4 md:p-6 text-[var(--color-gold)] border-x border-[var(--color-gold)]/20 bg-[var(--color-gold)]/5">Unlimited</div>
+                    <div class="p-4 md:p-6 text-gray-500">1x Only</div>
+                </div>
 
-    {{-- CTA --}}
-    <div class="text-center mt-20 fade-in-up">
-      <h3 class="text-2xl font-serif font-bold text-white mb-6">Sudah menemukan layanan yang cocok?</h3>
-      <a href="{{ route('booking.create') }}" class="inline-block bg-[var(--color-gold)] text-[var(--color-primary-bg)] px-10 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-gold-light)] transition shadow-lg hover:shadow-[var(--color-gold)]/30 transform hover:scale-105">
-        📅 Book Appointment
-      </a>
-    </div>
-  </div>
-</section>
+                 {{-- Row 3 --}}
+                 <div class="grid grid-cols-3 text-center text-sm items-center">
+                    <div class="p-4 md:p-6 text-[var(--color-text-light)] font-medium text-left md:text-center">Consultation</div>
+                    <div class="p-4 md:p-6 text-[var(--color-gold)] border-x border-[var(--color-gold)]/20 bg-[var(--color-gold)]/5">Free Lifetime</div>
+                    <div class="p-4 md:p-6 text-gray-500">Paid</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-{{-- Styles --}}
-<style>
-  /* Fade-in Animation */
-  .fade-in-up {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all .8s ease;
-  }
-  .fade-in-up.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    {{-- ============== BOOKING CTA ============== --}}
+    <section class="py-24 text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-serif font-bold text-white mb-6">Ready to shine?</h2>
+            <a href="{{ route('booking.create') }}" class="inline-block bg-[var(--color-gold)] text-[var(--color-primary-bg)] px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-gold-light)] transition shadow-lg hover:shadow-[var(--color-gold)]/30 transform hover:scale-105">
+                Book Your Date
+            </a>
+        </div>
+    </section>
 
-  /* Clamp text */
-  .line-clamp-4 {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* Expand Animation */
-  .service-desc.expanded {
-    -webkit-line-clamp: unset;
-    overflow: visible;
-  }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Fade-in animation
-  const items = document.querySelectorAll('.fade-in-up');
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('show');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: .1 });
-  items.forEach(el => io.observe(el));
-
-  // Expand / Collapse
-  document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const desc = btn.parentElement.querySelector('.service-desc');
-      const icon = btn.querySelector('.arrow-icon');
-      const text = btn.querySelector('span');
-
-      if (desc.classList.contains('line-clamp-4')) {
-        desc.classList.remove('line-clamp-4');
-        desc.classList.add('expanded');
-        text.textContent = 'Show Less';
-        icon.style.transform = 'rotate(180deg)';
-      } else {
-        desc.classList.add('line-clamp-4');
-        desc.classList.remove('expanded');
-        text.textContent = 'Read More';
-        icon.style.transform = 'rotate(0deg)';
-      }
-    });
-  });
-});
-</script>
-
+</div>
 @endsection

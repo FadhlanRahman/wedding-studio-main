@@ -1,69 +1,69 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 p-4 md:p-6">
-    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 border-b pb-3 text-center md:text-left">
+<div class="min-h-screen p-4 md:p-6">
+    <h1 class="text-2xl md:text-3xl font-serif font-bold text-white mb-6 border-b border-[var(--color-gold)]/20 pb-3 text-center md:text-left">
         📋 Daftar Booking
     </h1>
 
     <!-- ✅ Tabel versi desktop -->
     <div class="hidden md:block w-full overflow-x-auto">
-        <div class="inline-block min-w-full align-middle bg-white shadow-lg rounded-2xl">
+        <div class="inline-block min-w-full align-middle bg-[var(--color-secondary-bg)] shadow-xl rounded-2xl border border-[var(--color-gold)]/20">
             <table class="min-w-[900px] w-full text-sm border-collapse">
-                <thead class="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+                <thead class="bg-[var(--color-primary-bg)] text-[var(--color-gold)] border-b border-[var(--color-gold)]/20">
                     <tr>
-                        <th class="p-3 text-left">#</th>
-                        <th class="p-3 text-left">Nama Klien</th>
-                        <th class="p-3 text-left">Tanggal Booking</th>
-                        <th class="p-3 text-left">Layanan</th>
-                        <th class="p-3 text-left">Harga</th>
-                        <th class="p-3 text-left">Metode Bayar</th>
-                        <th class="p-3 text-left">Status</th>
-                        <th class="p-3 text-left">Bukti Bayar</th>
-                        <th class="p-3 text-left">Aksi</th>
+                        <th class="p-4 text-left font-serif tracking-wider">#</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Nama Klien</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Tanggal Booking</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Layanan</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Harga</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Metode Bayar</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Status</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Bukti Bayar</th>
+                        <th class="p-4 text-left font-serif tracking-wider">Aksi</th>
                     </tr>
                 </thead>
 
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="divide-y divide-[var(--color-gold)]/10 text-[var(--color-text-light)]">
                     @forelse($bookings as $booking)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="p-3">{{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}</td>
-                            <td class="p-3">{{ $booking->full_name }}</td>
-                            <td class="p-3">{{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}</td>
-                            <td class="p-3">{{ $booking->service->title ?? '-' }}</td>
-                            <td class="p-3 text-blue-700 font-semibold">Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}</td>
-                            <td class="p-3">{{ $booking->payment_method ?? '-' }}</td>
-                            <td class="p-3">
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold
-                                    {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 
-                                       ($booking->payment_status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                        <tr class="hover:bg-[var(--color-gold)]/5 transition duration-300">
+                            <td class="p-4">{{ ($bookings->currentPage() - 1) * $bookings->perPage() + $loop->iteration }}</td>
+                            <td class="p-4 font-bold">{{ $booking->full_name }}</td>
+                            <td class="p-4">{{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d F Y') }}</td>
+                            <td class="p-4 text-[var(--color-gold)]">{{ $booking->service->title ?? '-' }}</td>
+                            <td class="p-4 font-serif font-bold text-[var(--color-gold)]">Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}</td>
+                            <td class="p-4">{{ $booking->payment_method ?? '-' }}</td>
+                            <td class="p-4">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+                                    {{ $booking->payment_status == 'paid' ? 'bg-green-900/50 text-green-400 border border-green-500/30' : 
+                                       ($booking->payment_status == 'pending' ? 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30' : 'bg-red-900/50 text-red-400 border border-red-500/30') }}">
                                     {{ ucfirst($booking->payment_status) }}
                                 </span>
                                 <form action="{{ route('admin.bookings.update', $booking->id) }}" method="POST" class="mt-2">
                                     @csrf
                                     @method('PUT')
                                     <select name="payment_status" onchange="this.form.submit()" 
-                                        class="w-full border-gray-300 rounded-lg text-xs p-1.5 focus:ring-2 focus:ring-blue-400">
+                                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-lg text-xs p-1.5 focus:ring-1 focus:ring-[var(--color-gold)] text-[var(--color-text-light)]">
                                         <option disabled selected>-- Approval --</option>
                                         <option value="pending" {{ $booking->payment_status == 'pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="paid" {{ $booking->payment_status == 'paid' ? 'selected' : '' }}>Lunas</option>
                                     </select>
                                 </form>
                             </td>
-                            <td class="p-3">
+                            <td class="p-4">
                                 @if($booking->payment_proof)
                                     <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
                                         <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
-                                             class="w-16 h-16 object-cover rounded-lg shadow-md transform hover:scale-105 transition">
+                                             class="w-16 h-16 object-cover rounded-lg shadow-md border border-[var(--color-gold)]/20 transform hover:scale-105 transition">
                                     </a>
                                 @else
-                                    <span class="text-red-500 italic text-xs">Belum upload</span>
+                                    <span class="text-red-400 italic text-xs">Belum upload</span>
                                 @endif
                             </td>
-                            <td class="p-3">
-                                <div class="flex flex-col sm:flex-row gap-2">
+                            <td class="p-4">
+                                <div class="flex flex-col gap-2">
                                     <a href="{{ route('admin.bookings.edit', $booking->id) }}" 
-                                       class="bg-blue-500 text-white px-3 py-1.5 rounded-lg shadow hover:bg-blue-600 transition text-xs text-center">
+                                       class="bg-[var(--color-gold)] text-[var(--color-primary-bg)] px-3 py-1.5 rounded-lg shadow hover:bg-[var(--color-gold-light)] transition text-xs text-center font-bold uppercase tracking-wide">
                                         ✏️ Edit
                                     </a>
                                     <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST" 
@@ -71,7 +71,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" 
-                                                class="bg-red-500 text-white px-3 py-1.5 rounded-lg shadow hover:bg-red-600 transition text-xs w-full sm:w-auto">
+                                                class="bg-red-900/80 border border-red-500/30 text-red-200 px-3 py-1.5 rounded-lg shadow hover:bg-red-800 transition text-xs w-full font-bold uppercase tracking-wide">
                                             🗑️ Hapus
                                         </button>
                                     </form>
@@ -79,7 +79,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="9" class="p-6 text-center text-gray-500 italic">Belum ada booking.</td></tr>
+                        <tr><td colspan="9" class="p-8 text-center text-[var(--color-text-muted)] italic">Belum ada booking.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -89,40 +89,42 @@
     <!-- ✅ Card View versi Mobile -->
     <div class="md:hidden space-y-4">
         @forelse($bookings as $booking)
-            <div class="bg-white rounded-xl shadow-md p-4">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="font-bold text-gray-800 text-lg">{{ $booking->full_name }}</h2>
-                    <span class="text-sm text-gray-500">
+            <div class="bg-[var(--color-secondary-bg)] rounded-xl shadow-lg border border-[var(--color-gold)]/20 p-5">
+                <div class="flex justify-between items-center mb-3 border-b border-[var(--color-gold)]/10 pb-2">
+                    <h2 class="font-serif font-bold text-white text-lg">{{ $booking->full_name }}</h2>
+                    <span class="text-xs text-[var(--color-text-muted)]">
                         {{ \Carbon\Carbon::parse($booking->booking_date)->translatedFormat('d M Y') }}
                     </span>
                 </div>
 
-                <p class="text-sm text-gray-600"><strong>Layanan:</strong> {{ $booking->service->title ?? '-' }}</p>
-                <p class="text-sm text-gray-600"><strong>Harga:</strong> Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}</p>
-                <p class="text-sm text-gray-600"><strong>Metode:</strong> {{ $booking->payment_method ?? '-' }}</p>
+                <div class="space-y-1 text-sm text-[var(--color-text-light)]">
+                    <p><strong class="text-[var(--color-gold)]">Layanan:</strong> {{ $booking->service->title ?? '-' }}</p>
+                    <p><strong class="text-[var(--color-gold)]">Harga:</strong> Rp {{ number_format($booking->service->price ?? 0, 0, ',', '.') }}</p>
+                    <p><strong class="text-[var(--color-gold)]">Metode:</strong> {{ $booking->payment_method ?? '-' }}</p>
+                </div>
 
-                <div class="mt-2">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold
-                        {{ $booking->payment_status == 'paid' ? 'bg-green-100 text-green-700' : 
-                           ($booking->payment_status == 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                <div class="mt-3">
+                    <span class="px-2 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+                        {{ $booking->payment_status == 'paid' ? 'bg-green-900/50 text-green-400 border border-green-500/30' : 
+                           ($booking->payment_status == 'pending' ? 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30' : 'bg-red-900/50 text-red-400 border border-red-500/30') }}">
                         {{ ucfirst($booking->payment_status) }}
                     </span>
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4">
                     @if($booking->payment_proof)
                         <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
                             <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
-                                 class="w-full h-40 object-cover rounded-lg shadow-md">
+                                 class="w-full h-40 object-cover rounded-lg shadow-md border border-[var(--color-gold)]/20">
                         </a>
                     @else
-                        <p class="text-xs text-red-500 italic">Belum upload bukti bayar</p>
+                        <p class="text-xs text-red-400 italic">Belum upload bukti bayar</p>
                     @endif
                 </div>
 
                 <div class="mt-4 flex flex-col sm:flex-row gap-2">
                     <a href="{{ route('admin.bookings.edit', $booking->id) }}" 
-                       class="bg-blue-500 text-white px-3 py-2 rounded-lg shadow hover:bg-blue-600 text-center text-sm">
+                       class="bg-[var(--color-gold)] text-[var(--color-primary-bg)] px-3 py-2 rounded-lg shadow hover:bg-[var(--color-gold-light)] text-center text-sm font-bold uppercase">
                         ✏️ Edit
                     </a>
                     <form action="{{ route('admin.bookings.destroy', $booking->id) }}" method="POST" 
@@ -130,19 +132,19 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" 
-                                class="bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-600 w-full text-sm">
+                                class="bg-red-900/80 border border-red-500/30 text-red-200 px-3 py-2 rounded-lg shadow hover:bg-red-800 w-full text-sm font-bold uppercase">
                             🗑️ Hapus
                         </button>
                     </form>
                 </div>
             </div>
         @empty
-            <p class="text-center text-gray-500 italic">Belum ada booking.</p>
+            <p class="text-center text-[var(--color-text-muted)] italic">Belum ada booking.</p>
         @endforelse
     </div>
 
     <!-- Pagination -->
-    <div class="mt-6">
+    <div class="mt-8 flex justify-center">
         {{ $bookings->links() }}
     </div>
 </div>

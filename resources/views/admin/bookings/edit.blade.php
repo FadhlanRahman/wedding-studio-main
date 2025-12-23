@@ -1,64 +1,66 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="bg-gradient-to-b from-blue-50 to-white py-12 min-h-screen">
-    <div class="container mx-auto px-4">
+<div class="min-h-screen py-10 px-4">
+    <div class="max-w-4xl mx-auto">
         <form action="{{ route('admin.bookings.update', $booking->id) }}" 
               method="POST" 
               enctype="multipart/form-data" 
-              class="bg-white p-8 rounded-xl shadow-lg">
+              class="bg-[var(--color-secondary-bg)] p-6 md:p-10 rounded-3xl shadow-2xl border border-[var(--color-gold)]/20">
             @csrf
             @method('PUT')
 
-            <h1 class="text-2xl font-bold mb-6">Edit Booking</h1>
+            <h1 class="text-3xl font-serif font-bold mb-10 text-white border-b border-[var(--color-gold)]/20 pb-4 flex items-center gap-3">
+                <span>📝</span> Edit Booking
+            </h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Nama Lengkap -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Nama Lengkap</label>
                     <input type="text" name="full_name" value="{{ old('full_name', $booking->full_name) }}" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] placeholder-[var(--color-text-muted)]/50 transition">
                 </div>
 
                 <!-- No. Telepon -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">No. Telepon</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">No. Telepon</label>
                     <input type="text" name="phone" value="{{ old('phone', $booking->phone) }}" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] placeholder-[var(--color-text-muted)]/50 transition">
                 </div>
 
                 <!-- Tempat Lahir -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Tempat Lahir</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Tempat Lahir</label>
                     <input type="text" name="birth_place" value="{{ old('birth_place', $booking->birth_place) }}" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] placeholder-[var(--color-text-muted)]/50 transition">
                 </div>
 
                 <!-- Tanggal Lahir -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Tanggal Lahir</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Tanggal Lahir</label>
                     <input type="text" id="birth_date" name="birth_date" 
                         value="{{ old('birth_date', $booking->birth_date) }}" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] placeholder-[var(--color-text-muted)]/50 transition cursor-pointer">
                 </div>
 
                 <!-- Tanggal Booking -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Tanggal Booking</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Tanggal Booking</label>
                     <input type="text" id="booking_date" name="booking_date" 
                         value="{{ old('booking_date', $booking->booking_date) }}" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer">
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] placeholder-[var(--color-text-muted)]/50 transition cursor-pointer">
                 </div>
 
                 <!-- Paket Layanan -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Paket Layanan</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Paket Layanan</label>
                     <select name="service_id" id="service_package" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        <option value="">-- Pilih Paket --</option>
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] transition appearance-none">
+                        <option value="" class="bg-[var(--color-primary-bg)]">-- Pilih Paket --</option>
                         @foreach($services as $service)
                             <option value="{{ $service->id }}" data-price="{{ $service->price }}"
-                                {{ $booking->service_id == $service->id ? 'selected' : '' }}>
+                                {{ $booking->service_id == $service->id ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">
                                 {{ $service->title }} - Rp {{ number_format($service->price, 0, ',', '.') }}
                             </option>
                         @endforeach
@@ -66,62 +68,62 @@
                 </div>
 
                 <!-- Total Biaya -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Total Biaya</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Total Biaya</label>
                     <input type="text" name="total_price" id="total_price" 
                         value="Rp {{ number_format($booking->total_price, 0, ',', '.') }}" readonly
-                        class="w-full px-4 py-2 border rounded-lg bg-gray-100">
+                        class="w-full bg-[var(--color-primary-bg)]/50 border border-[var(--color-gold)]/10 rounded-xl px-4 py-3 text-[var(--color-gold)] font-bold font-serif text-lg cursor-not-allowed">
                 </div>
 
                 <!-- Metode Pembayaran -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Metode Pembayaran</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Metode Pembayaran</label>
                     <select name="payment_method" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        <option value="transfer" {{ $booking->payment_method=='transfer' ? 'selected' : '' }}>Transfer Bank</option>
-                        <option value="cod" {{ $booking->payment_method=='cod' ? 'selected' : '' }}>Cash on Delivery</option>
-                        <option value="ewallet" {{ $booking->payment_method=='ewallet' ? 'selected' : '' }}>E-Wallet (OVO, Dana, Gopay)</option>
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] transition appearance-none">
+                        <option value="transfer" {{ $booking->payment_method=='transfer' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">Transfer Bank</option>
+                        <option value="cod" {{ $booking->payment_method=='cod' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">Cash on Delivery</option>
+                        <option value="ewallet" {{ $booking->payment_method=='ewallet' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">E-Wallet (OVO, Dana, Gopay)</option>
                     </select>
                 </div>
 
                 <!-- Status Pembayaran -->
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Status Pembayaran</label>
+                <div class="group">
+                    <label class="block font-bold text-[var(--color-gold)] mb-2 uppercase tracking-wide text-sm group-hover:text-[var(--color-gold-light)] transition">Status Pembayaran</label>
                     <select name="payment_status" required
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        <option value="unpaid" {{ $booking->payment_status=='unpaid' ? 'selected' : '' }}>Belum Bayar</option>
-                        <option value="pending" {{ $booking->payment_status=='pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
-                        <option value="paid" {{ $booking->payment_status=='paid' ? 'selected' : '' }}>Lunas</option>
+                        class="w-full bg-[var(--color-primary-bg)] border border-[var(--color-gold)]/30 rounded-xl px-4 py-3 focus:ring-1 focus:ring-[var(--color-gold)] focus:border-[var(--color-gold)] focus:outline-none text-[var(--color-text-light)] transition appearance-none">
+                        <option value="unpaid" {{ $booking->payment_status=='unpaid' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">Belum Bayar</option>
+                        <option value="pending" {{ $booking->payment_status=='pending' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">Menunggu Konfirmasi</option>
+                        <option value="paid" {{ $booking->payment_status=='paid' ? 'selected' : '' }} class="bg-[var(--color-primary-bg)]">Lunas</option>
                     </select>
                 </div>
 
                 <!-- Bukti Pembayaran -->
-                <div class="md:col-span-2">
-                    <label class="block font-medium text-gray-700 mb-1">Bukti Pembayaran</label>
+                <div class="md:col-span-2 bg-[var(--color-primary-bg)] p-6 rounded-2xl border border-[var(--color-gold)]/10 text-center">
+                    <label class="block font-bold text-[var(--color-gold)] mb-4 uppercase tracking-wide text-sm">Bukti Pembayaran</label>
 
                     @if($booking->payment_proof)
-                        <div class="mb-3">
-                            <p class="text-sm text-gray-500 mb-1">Bukti pembayaran saat ini:</p>
+                        <div class="mb-4 inline-block">
+                            <p class="text-xs text-[var(--color-text-muted)] mb-2">Bukti pembayaran saat ini:</p>
                             <a href="{{ asset('uploads/payments/'.$booking->payment_proof) }}" target="_blank">
                                 <img src="{{ asset('uploads/payments/'.$booking->payment_proof) }}" 
                                      alt="Bukti Pembayaran" 
-                                     class="w-48 h-48 object-cover rounded-lg shadow-md border transform hover:scale-105 transition">
+                                     class="w-48 h-48 object-cover rounded-xl shadow-lg border border-[var(--color-gold)]/20 transform hover:scale-105 transition duration-300">
                             </a>
                         </div>
                     @else
-                        <p class="text-sm text-red-500 italic mb-2">Belum ada bukti pembayaran.</p>
+                        <p class="text-xs text-red-400 italic mb-4">Belum ada bukti pembayaran.</p>
                     @endif
 
                     <!-- Preview gambar baru -->
-                    <div id="preview-container" class="mt-3 hidden">
-                        <p class="text-sm text-gray-600 mb-1">Preview gambar baru:</p>
-                        <img id="preview-image" class="w-48 h-48 object-cover rounded-lg shadow-md border">
+                    <div id="preview-container" class="mt-4 hidden animate-fadeIn">
+                        <p class="text-xs text-[var(--color-text-light)] mb-2">Preview gambar baru:</p>
+                        <img id="preview-image" class="w-48 h-48 object-cover rounded-xl shadow-lg border border-[var(--color-gold)]/20 mx-auto">
                     </div>
                 </div>
             </div>
 
-            <div class="mt-6 text-center">
-                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+            <div class="mt-10 text-center">
+                <button type="submit" class="px-10 py-4 bg-[var(--color-gold)] text-[var(--color-primary-bg)] rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-gold-light)] shadow-lg hover:shadow-[var(--color-gold)]/20 transform hover:-translate-y-1 transition duration-300">
                     Update Booking
                 </button>
             </div>
