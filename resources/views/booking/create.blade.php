@@ -81,7 +81,7 @@
                             class="w-full px-4 py-3 bg-[var(--color-primary-bg)] border border-[var(--color-text-muted)]/30 rounded-xl text-white focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)] transition">
                             <option value="" class="text-gray-500">-- Pilih Layanan --</option>
                             @foreach($services as $service)
-                                <option value="{{ $service->id }}" data-price="{{ $service->price }}" class="text-black">
+                                <option value="{{ $service->id }}" data-price="{{ $service->price }}" class="text-white">
                                     {{ $service->title }} - Rp {{ number_format($service->price, 0, ',', '.') }}
                                 </option>
                             @endforeach
@@ -100,8 +100,8 @@
                         <label class="block font-medium text-[var(--color-gold)] text-sm uppercase tracking-wider mb-2">Opsi Pembayaran</label>
                         <select name="dp_option" id="dp_option" required
                             class="w-full px-4 py-3 bg-[var(--color-primary-bg)] border border-[var(--color-text-muted)]/30 rounded-xl text-white focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)] transition">
-                            <option value="full" class="text-black">Bayar Lunas</option>
-                            <option value="dp" class="text-black">DP 50%</option>
+                            <option value="full" class="text-white">Bayar Lunas</option>
+                            <option value="dp" class="text-white">DP 50%</option>
                         </select>
                     </div>
 
@@ -117,10 +117,10 @@
                         <label class="block font-medium text-[var(--color-gold)] text-sm uppercase tracking-wider mb-2">Metode Pembayaran</label>
                         <select name="payment_method" required
                             class="w-full px-4 py-3 bg-[var(--color-primary-bg)] border border-[var(--color-text-muted)]/30 rounded-xl text-white focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)] transition">
-                            <option value="" class="text-black">-- Pilih Metode --</option>
-                            <option value="transfer" class="text-black">Transfer Bank</option>
-                            <option value="cod" class="text-black">Cash on Delivery</option>
-                            <option value="ewallet" class="text-black">E-Wallet (OVO, Dana, Gopay)</option>
+                            <option value="" class="text-white">-- Pilih Metode --</option>
+                            <option value="transfer" class="text-white">Transfer Bank</option>
+                            <option value="cod" class="text-white">Cash on Delivery</option>
+                            <option value="ewallet" class="text-white">E-Wallet (OVO, Dana, Gopay)</option>
                         </select>
                     </div>
 
@@ -136,11 +136,11 @@
                         <label class="block font-medium text-[var(--color-gold)] text-sm uppercase tracking-wider mb-2">Status Pembayaran</label>
                         <select name="payment_status" required
                             class="w-full px-4 py-3 bg-[var(--color-primary-bg)] border border-[var(--color-text-muted)]/30 rounded-xl text-white focus:outline-none focus:border-[var(--color-gold)] focus:ring-1 focus:ring-[var(--color-gold)] transition">
-                            <option value="pending" class="text-black">Belum Bayar</option>
-                            <option value="paid" class="text-black">Lunas</option>
-                            <option value="dp_paid" class="text-black">DP Terbayar</option>
+                            <option value="pending" class="text-white">Belum Bayar</option>
+                            <option value="paid" class="text-white">Lunas</option>
+                            <option value="dp_paid" class="text-white">DP Terbayar</option>
                         </select>
-                    </div>
+                    </div> 
                 </div>
 
                 <!-- Navigation Buttons -->
