@@ -89,6 +89,19 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
         });
 
+        // ====================
+        // ====================
+        // PINJAMAN AKSESORIS
+        // ====================
+        Route::prefix('pinjaman-aksesoris')->name('pinjaman-aksesoris.')->group(function () {
+            Route::get('/', [AdminController::class, 'pinjamanIndex'])->name('index');
+            Route::get('/create', [AdminController::class, 'pinjamanCreate'])->name('create');
+            Route::post('/', [AdminController::class, 'pinjamanStore'])->name('store');
+            Route::get('/{id}/edit', [AdminController::class, 'pinjamanEdit'])->name('edit');
+            Route::put('/{id}', [AdminController::class, 'pinjamanUpdate'])->name('update');
+            Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])->name('destroy');
+        });
+
         // Team CRUD
         Route::prefix('team')->name('team.')->group(function () {
             Route::get('/', [AdminController::class, 'about'])->name('index');
