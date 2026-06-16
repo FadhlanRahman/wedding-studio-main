@@ -12,8 +12,7 @@ class PinjamanAksesoris extends Model
         'nama_barang',
         'stok',
         'harga',
-        'tanggal_barang',
-        'tanggal_pengembalian',
+        'harga_per_hari',
         'foto_barang'
     ];
 }

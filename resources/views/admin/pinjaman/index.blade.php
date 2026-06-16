@@ -7,7 +7,7 @@
         <div>
             <h1 class="text-3xl font-serif font-bold text-white">Data Pinjaman Aksesoris</h1>
             <p class="text-[var(--color-text-muted)] mt-1">
-                Daftar barang aksesoris yang sedang dipinjam.
+                Daftar barang aksesoris yang tersedia untuk disewa.
             </p>
         </div>
 
@@ -30,9 +30,8 @@
                     <th class="p-4 text-left">Foto</th>
                     <th class="p-4 text-left">Nama Barang</th>
                     <th class="p-4 text-left">Stok</th>
-                    <th class="p-4 text-left">Harga</th>
-                    <th class="p-4 text-left">Tanggal Barang</th>
-                    <th class="p-4 text-left">Tanggal Pengembalian</th>
+                    <th class="p-4 text-left">Harga Barang</th>
+                    <th class="p-4 text-left">Harga / Hari</th>
                     <th class="p-4 text-left">Aksi</th>
                 </tr>
             </thead>
@@ -62,29 +61,25 @@
                         </td>
 
                         <td class="p-4">
-                            {{ $item->tanggal_barang }}
-                        </td>
-
-                        <td class="p-4">
-                            {{ $item->tanggal_pengembalian }}
+                            Rp {{ number_format($item->harga_per_hari, 0, ',', '.') }}
                         </td>
 
                         <td class="p-4">
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('admin.pinjaman-aksesoris.edit', $item->id) }}"
-                                class="px-3 py-2 rounded-lg bg-[var(--color-gold)] text-black font-semibold hover:opacity-90 transition">
-                                    ✏️ Edit
+                                   class="px-3 py-2 rounded-lg bg-[var(--color-gold)] text-black font-semibold">
+                                    Edit
                                 </a>
 
                                 <form action="{{ route('admin.pinjaman-aksesoris.destroy', $item->id) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                      method="POST"
+                                      onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit"
-                                            class="px-3 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition">
-                                        🗑 Hapus
+                                            class="px-3 py-2 rounded-lg bg-red-600 text-white font-semibold">
+                                        Hapus
                                     </button>
                                 </form>
                             </div>
@@ -92,7 +87,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="p-6 text-center text-gray-400">
+                        <td colspan="6" class="p-6 text-center text-gray-400">
                             Belum ada data pinjaman aksesoris.
                         </td>
                     </tr>

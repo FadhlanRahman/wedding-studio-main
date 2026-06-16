@@ -50,24 +50,16 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label class="block text-[var(--color-gold)] font-semibold mb-2">
-                        Tanggal Barang Dipinjam
-                    </label>
-                    <input type="date"
-                           name="tanggal_barang"
-                           class="w-full px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]">
-                </div>
+            <div class="mb-6">
+                <label class="block text-[var(--color-gold)] font-semibold mb-2">
+                    Harga Sewa Per Hari
+                </label>
 
-                <div>
-                    <label class="block text-[var(--color-gold)] font-semibold mb-2">
-                        Tanggal Pengembalian
-                    </label>
-                    <input type="date"
-                           name="tanggal_pengembalian"
-                           class="w-full px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]">
-                </div>
+                <input type="number"
+                    name="harga_per_hari"
+                    min="0"
+                    placeholder="Contoh: 50000"
+                    class="w-full px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--color-gold)]">
             </div>
 
             <div class="mb-8">

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
 {
     Schema::create('pinjaman_aksesoris', function (Blueprint $table) {
-        $table->id();
-        $table->string('nama_barang');
-        $table->date('tanggal_barang');
-        $table->date('tanggal_pengembalian');
-        $table->string('foto_barang')->nullable();
-        $table->timestamps();
+            $table->id();
+            $table->string('nama_barang');
+            $table->integer('stok')->default(0);
+            $table->decimal('harga', 12, 2)->default(0);
+            $table->decimal('harga_per_hari', 12, 2)->default(0);
+            $table->string('foto_barang')->nullable();
+            $table->timestamps();
     });
 }
 

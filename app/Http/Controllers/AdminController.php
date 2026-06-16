@@ -293,100 +293,98 @@ public function servicesUpdate(Request $request, Service $service)
         return view('admin.profile', compact('admin'));
     }
 
-    // =================
-    // Pinjaman Aksesoris
-    // =================
-    public function pinjamanIndex()
+// =================
+// Pinjaman Aksesoris
+// =================
+public function pinjamanIndex()
 {
     $pinjaman = \App\Models\PinjamanAksesoris::latest()->get();
 
     return view('admin.pinjaman.index', compact('pinjaman'));
 }
 
-    public function pinjamanCreate()
-    {
-        return view('admin.pinjaman.create');
+public function pinjamanCreate()
+{
+    return view('admin.pinjaman.create');
+}
+
+public function pinjamanStore(Request $request)
+{
+    $request->validate([
+        'nama_barang'    => 'required|string|max:255',
+        'stok'           => 'required|integer|min:0',
+        'harga'          => 'required|numeric|min:0',
+        'harga_per_hari' => 'required|numeric|min:0',
+        'foto_barang'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $fotoPath = null;
+
+    if ($request->hasFile('foto_barang')) {
+        $fotoPath = $request->file('foto_barang')->store('pinjaman', 'public');
     }
 
-        public function pinjamanStore(Request $request)
-    {
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'harga' => 'required|numeric|min:0',
-            'tanggal_barang' => 'required|date',
-            'tanggal_pengembalian' => 'required|date',
-            'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    \App\Models\PinjamanAksesoris::create([
+        'nama_barang'    => $request->nama_barang,
+        'stok'           => $request->stok,
+        'harga'          => $request->harga,
+        'harga_per_hari' => $request->harga_per_hari,
+        'foto_barang'    => $fotoPath,
+    ]);
 
-        $fotoPath = null;
+    return redirect()->route('admin.pinjaman-aksesoris.index')
+        ->with('success', 'Data pinjaman aksesoris berhasil ditambahkan!');
+}
 
-        if ($request->hasFile('foto_barang')) {
-            $fotoPath = $request->file('foto_barang')->store('pinjaman', 'public');
-        }
+public function pinjamanEdit($id)
+{
+    $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
 
-        \App\Models\PinjamanAksesoris::create([
-            'nama_barang' => $request->nama_barang,
-            'stok' => $request->stok,
-            'harga' => $request->harga,
-            'tanggal_barang' => $request->tanggal_barang,
-            'tanggal_pengembalian' => $request->tanggal_pengembalian,
-            'foto_barang' => $fotoPath,
-        ]);
+    return view('admin.pinjaman.edit', compact('pinjaman'));
+}
 
-        return redirect()->route('admin.pinjaman-aksesoris.index')
-                         ->with('success', 'Data pinjaman aksesoris berhasil ditambahkan!');
+public function pinjamanUpdate(Request $request, $id)
+{
+    $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
+
+    $request->validate([
+        'nama_barang'    => 'required|string|max:255',
+        'stok'           => 'required|integer|min:0',
+        'harga'          => 'required|numeric|min:0',
+        'harga_per_hari' => 'required|numeric|min:0',
+        'foto_barang'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $fotoPath = $pinjaman->foto_barang;
+
+    if ($request->hasFile('foto_barang')) {
+        $fotoPath = $request->file('foto_barang')->store('pinjaman', 'public');
     }
 
-    public function pinjamanEdit($id)
-    {
-        $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
-        return view('admin.pinjaman.edit', compact('pinjaman'));
+    $pinjaman->update([
+        'nama_barang'    => $request->nama_barang,
+        'stok'           => $request->stok,
+        'harga'          => $request->harga,
+        'harga_per_hari' => $request->harga_per_hari,
+        'foto_barang'    => $fotoPath,
+    ]);
+
+    return redirect()->route('admin.pinjaman-aksesoris.index')
+        ->with('success', 'Data pinjaman aksesoris berhasil diperbarui!');
+}
+
+public function pinjamanDestroy($id)
+{
+    $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
+
+    if ($pinjaman->foto_barang) {
+        Storage::disk('public')->delete($pinjaman->foto_barang);
     }
 
-    public function pinjamanUpdate(Request $request, $id)
-    {
-        $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
+    $pinjaman->delete();
 
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'stok' => 'required|integer|min:0',
-            'harga' => 'required|numeric|min:0',
-            'tanggal_barang' => 'required|date',
-            'tanggal_pengembalian' => 'required|date',
-            'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    return redirect()->route('admin.pinjaman-aksesoris.index')
+        ->with('success', 'Data pinjaman aksesoris berhasil dihapus!');
+}
 
-        $fotoPath = $pinjaman->foto_barang;
-
-        if ($request->hasFile('foto_barang')) {
-            $fotoPath = $request->file('foto_barang')->store('pinjaman', 'public');
-        }
-
-        $pinjaman->update([
-            'nama_barang' => $request->nama_barang,
-            'stok' => $request->stok,
-            'harga' => $request->harga,
-            'tanggal_barang' => $request->tanggal_barang,
-            'tanggal_pengembalian' => $request->tanggal_pengembalian,
-            'foto_barang' => $fotoPath,
-        ]);
-
-        return redirect()->route('admin.pinjaman-aksesoris.index')
-                         ->with('success', 'Data pinjaman aksesoris berhasil diperbarui!');
-    }
-
-    public function pinjamanDestroy($id)
-    {
-        $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
-
-        if ($pinjaman->foto_barang) {
-            Storage::disk('public')->delete($pinjaman->foto_barang);
-        }
-
-        $pinjaman->delete();
-
-        return redirect()->route('admin.pinjaman-aksesoris.index')
-                         ->with('success', 'Data pinjaman aksesoris berhasil dihapus!');
-    }
 }
