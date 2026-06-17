@@ -99,33 +99,21 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
         });
 
-        Route::prefix('pinjaman-aksesoris')
-    ->name('pinjaman-aksesoris.')
-    ->group(function () {
+        // Pinjaman Aksesoris
+        Route::prefix('pinjaman-aksesoris')->name('pinjaman-aksesoris.')->group(function () {
+            // Data Penyewaan User
+            Route::get('/transaksi', [AdminController::class, 'transaksiPinjaman'])->name('transaksi');
 
-    // Data Penyewaan User
-    Route::get('/transaksi', [AdminController::class, 'transaksiPinjaman'])
-        ->name('transaksi');
-
-    // Data Barang
-    Route::get('/', [AdminController::class, 'pinjamanIndex'])
-        ->name('index');
-
-    Route::get('/create', [AdminController::class, 'pinjamanCreate'])
-        ->name('create');
-
-    Route::post('/', [AdminController::class, 'pinjamanStore'])
-        ->name('store');
-
-    Route::get('/{id}/edit', [AdminController::class, 'pinjamanEdit'])
-        ->name('edit');
-
-    Route::put('/{id}', [AdminController::class, 'pinjamanUpdate'])
-        ->name('update');
-
-    Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])
-        ->name('destroy');
-});
+            // Data Barang
+            Route::get('/', [AdminController::class, 'pinjamanIndex'])->name('index');
+            Route::get('/create', [AdminController::class, 'pinjamanCreate'])->name('create');
+            Route::post('/', [AdminController::class, 'pinjamanStore'])->name('store');
+            Route::get('/{id}/edit', [AdminController::class, 'pinjamanEdit'])->name('edit');
+            Route::put('/{id}', [AdminController::class, 'pinjamanUpdate'])->name('update');
+            Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])->name('destroy');
+            Route::post('/{id}/kurangi-stok', [AdminController::class, 'pinjamanKurangiStok'])->name('kurangi-stok');
+            Route::put('/{id}/stok', [AdminController::class, 'pinjamanUpdateStok'])->name('update-stok');
+        });
 
         // Team CRUD
         Route::prefix('team')->name('team.')->group(function () {

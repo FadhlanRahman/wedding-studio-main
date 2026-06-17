@@ -42,19 +42,14 @@
                         <td class="p-4">
                             @if($item->foto_barang)
                                 <img src="{{ asset('storage/' . $item->foto_barang) }}"
-                                     class="w-20 h-20 object-cover rounded-xl border border-[var(--color-gold)]/40">
+                                    class="w-20 h-20 object-cover rounded-xl border border-[var(--color-gold)]/40">
                             @else
                                 <span class="text-gray-400">Tidak ada foto</span>
                             @endif
                         </td>
 
-                        <td class="p-4 font-semibold">
-                            {{ $item->nama_barang }}
-                        </td>
-
-                        <td class="p-4">
-                            {{ $item->stok }}
-                        </td>
+                        <td class="p-4 font-semibold">{{ $item->nama_barang }}</td>
+                        <td class="p-4">{{ $item->stok }}</td>
 
                         <td class="p-4">
                             Rp {{ number_format($item->harga, 0, ',', '.') }}
@@ -66,19 +61,37 @@
 
                         <td class="p-4">
                             <div class="flex items-center gap-2">
+                                <form action="{{ route('admin.pinjaman-aksesoris.update-stok', $item->id) }}"
+                                    method="POST"
+                                    class="flex items-center gap-2">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="number"
+                                        name="stok"
+                                        min="0"
+                                        value="{{ $item->stok }}"
+                                        class="w-20 px-3 py-2 rounded-lg bg-white text-black text-sm">
+
+                                    <button type="submit"
+                                            class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold">
+                                        Ubah Stok
+                                    </button>
+                                </form>
+
                                 <a href="{{ route('admin.pinjaman-aksesoris.edit', $item->id) }}"
-                                   class="px-3 py-2 rounded-lg bg-[var(--color-gold)] text-black font-semibold">
+                                class="px-3 py-2 rounded-lg bg-[var(--color-gold)] text-black text-sm font-semibold">
                                     Edit
                                 </a>
 
                                 <form action="{{ route('admin.pinjaman-aksesoris.destroy', $item->id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    method="POST"
+                                    class="delete-form">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit"
-                                            class="px-3 py-2 rounded-lg bg-red-600 text-white font-semibold">
+                                            class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm font-semibold">
                                         Hapus
                                     </button>
                                 </form>

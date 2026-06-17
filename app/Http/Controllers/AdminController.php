@@ -392,6 +392,32 @@ public function pinjamanUpdate(Request $request, $id)
         ->with('success', 'Data pinjaman aksesoris berhasil diperbarui!');
 }
 
+public function pinjamanKurangiStok($id)
+{
+    $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
+
+    if ($pinjaman->stok <= 0) {
+        return redirect()->back()->with('error', 'Stok barang sudah habis!');
+    }
+
+    $pinjaman->stok = $pinjaman->stok - 1;
+    $pinjaman->save();
+
+    return redirect()->back()->with('success', 'Stok barang berhasil dikurangi!');
+}
+public function pinjamanUpdateStok(Request $request, $id)
+{
+    $request->validate([
+        'stok' => 'required|integer|min:0',
+    ]);
+
+    $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
+    $pinjaman->update([
+        'stok' => $request->stok,
+    ]);
+
+    return redirect()->back()->with('success', 'Stok berhasil diperbarui!');
+}
 public function pinjamanDestroy($id)
 {
     $pinjaman = \App\Models\PinjamanAksesoris::findOrFail($id);
