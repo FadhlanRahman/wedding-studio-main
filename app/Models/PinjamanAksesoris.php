@@ -15,4 +15,12 @@ class PinjamanAksesoris extends Model
         'harga_per_hari',
         'foto_barang'
     ];
+     // Relasi ke transaksi pinjaman
+    public function transaksi()
+    {
+        return $this->hasMany(
+            TransaksiPinjaman::class,
+            'pinjaman_aksesoris_id'
+        );
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\Service;
 use App\Models\Team;
 use App\Models\Testimonial;
 use App\Models\PinjamanAksesoris;
+use App\Models\TransaksiPinjaman;
 
 class AdminController extends Controller
 {
@@ -298,9 +299,27 @@ public function servicesUpdate(Request $request, Service $service)
 // =================
 public function pinjamanIndex()
 {
-    $pinjaman = \App\Models\PinjamanAksesoris::latest()->get();
+    $pinjaman = PinjamanAksesoris::latest()->get();
 
-    return view('admin.pinjaman.index', compact('pinjaman'));
+    return view(
+        'admin.pinjaman.index',
+        compact('pinjaman')
+    );
+}
+
+// =================
+// Data Penyewaan User
+// =================
+public function transaksiPinjaman()
+{
+    $transaksi = TransaksiPinjaman::with('barang')
+        ->latest()
+        ->get();
+
+    return view(
+        'admin.pinjaman.transaksi',
+        compact('transaksi')
+    );
 }
 
 public function pinjamanCreate()

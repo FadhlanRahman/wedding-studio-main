@@ -315,6 +315,9 @@
              <a href="{{ route('booking.create') }}" class="group bg-[var(--color-gold)] text-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-gold-light)] transition shadow-xl shadow-[var(--color-gold)]/30 flex items-center justify-center gap-3 transform hover:-translate-y-1">
                 <span>Book Via Website</span>
              </a>
+             <a href="{{ route('pinjaman.index') }}" class="group bg-[var(--color-gold)] text-[var(--color-primary-bg)] border-2 border-[var(--color-gold)] px-10 py-5 rounded-full font-bold uppercase tracking-widest hover:bg-[var(--color-gold-light)] transition shadow-xl shadow-[var(--color-gold)]/30 flex items-center justify-center gap-3 transform hover:-translate-y-1">
+                <span>Pinjaman aksesoris</span>
+             </a>
         </div>
     </div>
 </section>

@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\PinjamanController;
 
 // ====================
 // HALAMAN UMUM (TANPA LOGIN)
@@ -23,6 +24,15 @@ Route::post('/booking/store', [BookingController::class, 'store'])->name('bookin
 
 // ✅ User submit testimonial (form kirim testimoni)
 Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
+
+Route::get('/pinjaman', [PinjamanController::class,'index'])
+    ->name('pinjaman.index');
+
+Route::get('/pinjaman/create', [PinjamanController::class,'create'])
+    ->name('pinjaman.create');
+
+Route::post('/pinjaman/store', [PinjamanController::class,'store'])
+    ->name('pinjaman.store');
 
 // ====================
 // AUTENTIKASI
@@ -89,18 +99,33 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{service}', [AdminController::class, 'servicesDestroy'])->name('destroy');
         });
 
-        // ====================
-        // ====================
-        // PINJAMAN AKSESORIS
-        // ====================
-        Route::prefix('pinjaman-aksesoris')->name('pinjaman-aksesoris.')->group(function () {
-            Route::get('/', [AdminController::class, 'pinjamanIndex'])->name('index');
-            Route::get('/create', [AdminController::class, 'pinjamanCreate'])->name('create');
-            Route::post('/', [AdminController::class, 'pinjamanStore'])->name('store');
-            Route::get('/{id}/edit', [AdminController::class, 'pinjamanEdit'])->name('edit');
-            Route::put('/{id}', [AdminController::class, 'pinjamanUpdate'])->name('update');
-            Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])->name('destroy');
-        });
+        Route::prefix('pinjaman-aksesoris')
+    ->name('pinjaman-aksesoris.')
+    ->group(function () {
+
+    // Data Penyewaan User
+    Route::get('/transaksi', [AdminController::class, 'transaksiPinjaman'])
+        ->name('transaksi');
+
+    // Data Barang
+    Route::get('/', [AdminController::class, 'pinjamanIndex'])
+        ->name('index');
+
+    Route::get('/create', [AdminController::class, 'pinjamanCreate'])
+        ->name('create');
+
+    Route::post('/', [AdminController::class, 'pinjamanStore'])
+        ->name('store');
+
+    Route::get('/{id}/edit', [AdminController::class, 'pinjamanEdit'])
+        ->name('edit');
+
+    Route::put('/{id}', [AdminController::class, 'pinjamanUpdate'])
+        ->name('update');
+
+    Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])
+        ->name('destroy');
+});
 
         // Team CRUD
         Route::prefix('team')->name('team.')->group(function () {

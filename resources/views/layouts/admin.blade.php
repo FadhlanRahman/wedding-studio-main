@@ -47,6 +47,12 @@
                         <span>📦</span> Pinjaman Aksesoris
                     </a>
                 </li>
+                 <li>
+                    <a href="{{ route('admin.pinjaman-aksesoris.transaksi') }}" 
+                       class="flex items-center gap-4 px-4 py-3 rounded-xl transition duration-300 {{ request()->routeIs('admin.pinjaman-aksesoris.*') ? 'bg-[var(--color-gold)] text-[var(--color-primary-bg)] font-bold shadow-lg' : 'text-[var(--color-text-muted)] hover:bg-[var(--color-gold)]/10 hover:text-[var(--color-gold)]' }}">
+                        <span>📋</span> Data Penyewaan
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('admin.services.index') }}" 
                        class="flex items-center gap-4 px-4 py-3 rounded-xl transition duration-300 {{ request()->routeIs('admin.services.*') ? 'bg-[var(--color-gold)] text-[var(--color-primary-bg)] font-bold shadow-lg' : 'text-[var(--color-text-muted)] hover:bg-[var(--color-gold)]/10 hover:text-[var(--color-gold)]' }}">
