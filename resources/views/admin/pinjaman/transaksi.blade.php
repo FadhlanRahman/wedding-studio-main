@@ -92,28 +92,37 @@
                         </td>
 
                         <td class="p-4">
+                            
+                                @csrf
+                                @method('PUT')
 
-                            @if($trx->status == 'pending')
-                                <span class="px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-300">
-                                    Pending
-                                </span>
+                                <select name="status"
+                                        onchange="this.form.submit()"
+                                        class="px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600">
 
-                            @elseif($trx->status == 'approved')
-                                <span class="px-3 py-1 rounded-lg bg-green-500/20 text-green-300">
-                                    Approved
-                                </span>
+                                    <option value="pending"
+                                        {{ $trx->status == 'pending' ? 'selected' : '' }}>
+                                        Pending
+                                    </option>
 
-                            @elseif($trx->status == 'rejected')
-                                <span class="px-3 py-1 rounded-lg bg-red-500/20 text-red-300">
-                                    Rejected
-                                </span>
+                                    <option value="approved"
+                                        {{ $trx->status == 'approved' ? 'selected' : '' }}>
+                                        Approved
+                                    </option>
 
-                            @elseif($trx->status == 'returned')
-                                <span class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300">
-                                    Returned
-                                </span>
+                                    <option value="rejected"
+                                        {{ $trx->status == 'rejected' ? 'selected' : '' }}>
+                                        Rejected
+                                    </option>
 
-                            @endif
+                                    <option value="returned"
+                                        {{ $trx->status == 'returned' ? 'selected' : '' }}>
+                                        Returned
+                                    </option>
+
+                                </select>
+
+                            </form>
 
                         </td>
 

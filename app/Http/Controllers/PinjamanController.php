@@ -91,6 +91,9 @@ class PinjamanController extends Controller
             'status' => 'pending',
         ]);
 
+        $barang->stok = $barang->stok - $request->jumlah_pinjam;
+        $barang->save();
+
         return redirect()
             ->route('pinjaman.index')
             ->with('success', 'Penyewaan berhasil dikirim dan menunggu persetujuan admin.');

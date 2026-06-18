@@ -431,5 +431,18 @@ public function pinjamanDestroy($id)
     return redirect()->route('admin.pinjaman-aksesoris.index')
         ->with('success', 'Data pinjaman aksesoris berhasil dihapus!');
 }
+public function updateStatusPinjaman(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:pending,approved,rejected,returned'
+    ]);
+
+    $transaksi = TransaksiPinjaman::findOrFail($id);
+
+    $transaksi->status = $request->status;
+    $transaksi->save();
+
+    return back()->with('success', 'Status berhasil diperbarui.');
+}
 
 }

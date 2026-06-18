@@ -290,4 +290,17 @@ document.getElementById('tanggal_kembali')
 
 </script>
 
+<style>
+#tanggal_ambil::-webkit-calendar-picker-indicator,
+#tanggal_kembali::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+#tanggal_ambil,
+#tanggal_kembali {
+    color-scheme: white;
+}
+</style>
+
 @endsection

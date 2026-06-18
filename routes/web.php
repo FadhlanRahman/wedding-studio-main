@@ -113,6 +113,7 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{id}', [AdminController::class, 'pinjamanDestroy'])->name('destroy');
             Route::post('/{id}/kurangi-stok', [AdminController::class, 'pinjamanKurangiStok'])->name('kurangi-stok');
             Route::put('/{id}/stok', [AdminController::class, 'pinjamanUpdateStok'])->name('update-stok');
+            
         });
 
         // Team CRUD
