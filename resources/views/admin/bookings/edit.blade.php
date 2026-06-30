@@ -134,44 +134,94 @@
 <!-- Flatpickr -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    // --- Flatpickr setup ---
-    let bookedDates = @json(\App\Models\Booking::pluck('booking_date')->toArray());
-    let currentBooking = "{{ $booking->booking_date }}";
 
-    flatpickr("#birth_date", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d F Y",
-        allowInput: true
-    });
+let bookedDates = @json(\App\Models\Booking::pluck('booking_date')->toArray());
+let currentBooking = "{{ $booking->booking_date }}";
 
-    flatpickr("#booking_date", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d F Y",
-        minDate: "today",
-        disable: bookedDates.filter(d => d !== currentBooking),
-        allowInput: true
-    });
+flatpickr("#birth_date", {
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "d F Y",
+    allowInput: true
+});
 
-    // --- Update harga otomatis ---
-    document.getElementById('service_package').addEventListener('change', function () {
-        let price = this.options[this.selectedIndex].getAttribute('data-price');
-        document.getElementById('total_price').value = price ? `Rp ${parseInt(price).toLocaleString()}` : '';
-    });
+flatpickr("#booking_date", {
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "d F Y",
+    minDate: "today",
+    disable: bookedDates.filter(d => d !== currentBooking),
+    allowInput: true
+});
 
-    // --- Preview gambar baru ---
-    document.getElementById('payment_proof').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
+// Update Harga
+document.getElementById('service_package').addEventListener('change', function(){
+
+    let price = this.options[this.selectedIndex].dataset.price;
+
+    if(price){
+        document.getElementById('total_price').value =
+        "Rp " + Number(price).toLocaleString('id-ID');
+    }
+
+});
+
+// Preview Gambar
+const paymentProof = document.getElementById('payment_proof');
+
+if(paymentProof){
+
+    paymentProof.addEventListener('change',function(e){
+
+        const file = e.target.files[0];
+
+        if(file){
+
             const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('preview-image').src = e.target.result;
+
+            reader.onload=function(event){
+
+                document.getElementById('preview-image').src=event.target.result;
+
                 document.getElementById('preview-container').classList.remove('hidden');
-            };
+
+            }
+
             reader.readAsDataURL(file);
+
         }
+
     });
+
+}
+
+@if(session('success'))
+Swal.fire({
+    icon:'success',
+    title:'Berhasil',
+    text:"{{ session('success') }}"
+});
+@endif
+
+@if(session('error'))
+Swal.fire({
+    icon:'error',
+    title:'Gagal',
+    text:"{{ session('error') }}"
+});
+@endif
+
+@if($errors->any())
+Swal.fire({
+    icon:'error',
+    title:'Terjadi Kesalahan',
+    html:`{!! implode('<br>', $errors->all()) !!}`
+});
+@endif
+
 </script>
+
 @endsection

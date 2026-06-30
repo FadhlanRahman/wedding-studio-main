@@ -13,8 +13,12 @@ class BookingController extends Controller
      */
     public function create()
     {
-        $services = Service::all(); // ✅ ambil semua services
-        return view('booking.create', compact('services'));
+    $services = Service::all();
+
+    // ambil semua tanggal yang sudah dibooking
+    $bookedDates = Booking::pluck('booking_date')->toArray();
+
+    return view('booking.create', compact('services', 'bookedDates'));
     }
 
     /**
@@ -22,34 +26,49 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'full_name'      => 'required|string|max:255',
-            'birth_place'    => 'nullable|string|max:255',
-            'birth_date'     => 'nullable|date',
-            'booking_date'   => 'required|date|unique:bookings,booking_date',
-            'phone'          => 'required|string|max:15',
-            'service_id'     => 'required|exists:services,id',
-            'payment_method' => 'nullable|string',
-            'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    $request->validate([
+        'full_name'      => 'required|string|max:255',
+        'birth_place'    => 'required|string|max:255',
+        'birth_date'     => 'required|date',
+        'booking_date'   => 'required|date',
+        'phone'          => 'required|string|max:15',
+        'service_id'     => 'required|exists:services,id',
+        'payment_method' => 'required|string',
+        'payment_proof'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $service = Service::findOrFail($request->service_id);
+    // cek apakah tanggal sudah dipakai
+    if (Booking::where('booking_date', $request->booking_date)->exists()) {
 
-        $data = $request->except(['payment_proof']);
-        $data['service_id']     = $request->service_id;
-        $data['total_price']    = $service->price;   // ✅ harga otomatis
-        $data['payment_status'] = 'pending';         // ✅ default
+        return redirect()->back()
+            ->withInput()
+            ->with('error', 'Tanggal tersebut sudah dibooking. Silakan pilih tanggal lain.');
+    }
 
-        if ($request->hasFile('payment_proof')) {
-            $filename = time().'_'.$request->file('payment_proof')->getClientOriginalName();
-            $request->file('payment_proof')->move(public_path('uploads/payments'), $filename);
-            $data['payment_proof'] = $filename;
-        }
+    $service = Service::findOrFail($request->service_id);
 
-        Booking::create($data);
+    $data = $request->except('payment_proof');
 
-        return redirect()->route('booking.create')
-            ->with('success', 'Booking berhasil dibuat! Tunggu verifikasi pembayaran.');
+    $data['service_id'] = $service->id;
+    $data['total_price'] = $service->price;
+    $data['payment_status'] = 'pending';
+
+    if ($request->hasFile('payment_proof')) {
+
+        $filename = time().'_'.$request->file('payment_proof')->getClientOriginalName();
+
+        $request->file('payment_proof')->move(
+            public_path('uploads/payments'),
+            $filename
+        );
+
+        $data['payment_proof'] = $filename;
+    }
+
+    Booking::create($data);
+
+    return redirect()->route('booking.create')
+        ->with('success', 'Booking berhasil dibuat. Tunggu konfirmasi dari admin.');
     }
 
     /**

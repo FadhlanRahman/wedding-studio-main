@@ -231,14 +231,34 @@
         });
     });
 
-    // === SWEETALERT BERHASIL ===
-    @if(session('success'))
+        // === SWEETALERT BERHASIL ===
+
+        @if(session('success'))
         Swal.fire({
             icon: 'success',
-            title: 'Booking Berhasil!',
-            text: "{{ session('success') }}",
-            confirmButtonColor: '#2563eb'
+            title: 'Booking Berhasil',
+            text: '{{ session("success") }}',
+            confirmButtonColor: '#d4af37'
         });
-    @endif
-</script>
-@endsection
+        @endif
+
+        @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Booking Gagal',
+            text: '{{ session("error") }}',
+            confirmButtonColor: '#dc2626'
+        });
+        @endif
+
+        @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Data Belum Lengkap',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            confirmButtonColor: '#dc2626'
+        });
+        @endif
+        </script>
+
+        @endsection
